@@ -1,0 +1,58 @@
+{
+  "syllabus": {
+    "academicYear": "2026-27",
+    "sourceOfTruth": "https://cbseacademic.nic.in/curriculum_2026.html",
+    "board": "CBSE",
+    "class": "X",
+    "ncertFloor": "NCERT_2026_27",
+    "extendedCeiling": ["RD_SHARMA", "RS_AGGARWAL"],
+    "subjects": ["Mathematics", "Science", "SocialScience", "English", "Hindi"],
+    "pdfUrls": [
+      "https://cbseacademic.nic.in/web_material/CurriculumMain26/Sec/Curriculum_Sec_2026-27.pdf",
+      "https://cbseacademic.nic.in/web_material/CurriculumMain26/Sec/Mathematics_Sec_2026-27.pdf",
+      "https://cbseacademic.nic.in/web_material/CurriculumMain26/Sec/Science_Sec_2026-27.pdf"
+    ]
+  },
+  "chunking": {
+    "minWords": 500,
+    "maxWords": 1000,
+    "overlapWords": 80,
+    "boundary": "sentence",
+    "dedup": true,
+    "okfVersion": "0.2"
+  },
+  "parsing": {
+    "stripAirfillers": ["uh", "like", "you know", "so", "actually", "basically", "kind of", "sort of"],
+    "normalize": ["extra_spaces", "apostrophe", "comma", "single_quote", "double_quote"],
+    "lowercase": false,
+    "removeDuplicateValues": true
+  },
+  "embedding": {
+    "provider": "openai",
+    "model": "text-embedding-3-large",
+    "dimensions": 1536,
+    "batchSize": 32
+  },
+  "s3": {
+    "bucket": "bharat-shiksha-2026-27",
+    "region": "ap-south-1",
+    "prefix": "curriculum/2026-27",
+    "storageClass": "STANDARD",
+    "sse": "AES256",
+    "versioning": true,
+    "protocols": ["s3://", "https:// via CloudFront", "presigned GET 3600s"],
+    "lifecycle": { "rawPdfs": "GLACIER after 90d", "chunks": "STANDARD_IA after 30d" },
+    "vectorPrefix": "vector/qdrant",
+    "graphPrefix": "graph/graphify"
+  },
+  "graphify": {
+    "directed": false,
+    "mode": "deep",
+    "chunkSize": 22
+  },
+  "mesh": {
+    "loadBalancer": "HTMX/Redis + WebRTC",
+    "openSourceCloud": "Vectorless/S3 via AWS/Azure OpenAPI",
+    "orchestration": "LangGraph + LangChain + LangSmith (loop engineering) + DeepSeek Harness"
+  }
+}

@@ -1,0 +1,1 @@
+# Quadratic, trigo solvers
