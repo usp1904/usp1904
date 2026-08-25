@@ -1,8 +1,8 @@
-"""Database layer ΓÇö delegates to db.py abstraction (SQLite or PostgreSQL/Neon).
+"""Database layer — delegates to db.py abstraction (SQLite or PostgreSQL/Neon).
 
 Set DATABASE_URL to switch backends:
-  sqlite:///cbse_content.db    ΓåÆ SQLite (local dev, default)
-  postgresql://user:pass@host/db  ΓåÆ PostgreSQL / Neon (production)
+  sqlite:///cbse_content.db    → SQLite (local dev, default)
+  postgresql://user:pass@host/db  → PostgreSQL / Neon (production)
 """
 import os
 import json
