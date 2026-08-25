@@ -1,8 +1,8 @@
-"""Database layer — delegates to db.py abstraction (SQLite or PostgreSQL/Neon).
+"""Database layer ΓÇö delegates to db.py abstraction (SQLite or PostgreSQL/Neon).
 
 Set DATABASE_URL to switch backends:
-  sqlite:///cbse_content.db    → SQLite (local dev, default)
-  postgresql://user:pass@host/db  → PostgreSQL / Neon (production)
+  sqlite:///cbse_content.db    ΓåÆ SQLite (local dev, default)
+  postgresql://user:pass@host/db  ΓåÆ PostgreSQL / Neon (production)
 """
 import os
 import json
@@ -321,6 +321,11 @@ def init_db():
         init_review_tables()
     except Exception as e:
         log.warning("Review tables init skipped: %s", e)
+    try:
+        from enterprise.enterprise_schema import init_enterprise_schema
+        init_enterprise_schema()
+    except Exception as e:
+        log.warning("Enterprise schema init skipped: %s", e)
 
     # Invalidate syllabus cache
     try:

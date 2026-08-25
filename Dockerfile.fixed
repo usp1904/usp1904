@@ -1,0 +1,36 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# IPv4-only pip (avoid AAAA lookup stalls on hosts without IPv6)
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PORT=9090 \
+    UVICORN_WORKERS=4 \
+    DATABASE_URL=sqlite:////app/data/cbse_content.db \
+    ALLOWED_HOSTS=*
+
+# System deps: curl for healthcheck, no ipv6 extras
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy app
+COPY *.py /app/
+COPY templates/ /app/templates/
+COPY seed_data/ /app/seed_data/
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
+# Data dir for named volume (holds cbse_content.db, WAL/SHM)
+RUN mkdir -p /app/data
+
+EXPOSE 9090
+
+# Health companion (no ipv6 bracket)
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=15s \
+  CMD curl -f http://127.0.0.1:9090/health || exit 1
+
+CMD ["/bin/sh", "start.sh"]

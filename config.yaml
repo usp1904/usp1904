@@ -2,3 +2,15 @@ model:
   provider: mistral  # Change from local/cpu to mistral api
   name: mistral-large-latest  # This has a large 128K context window
   api_key: "ollamakey"
+
+deepseek:
+  api_key: "${DEEPSEEK_API_KEY}"  # set env DEEPSEEK_API_KEY to enable DeepSeek harness
+  model: deepseek-chat   # or deepseek-reasoner for hard challenges
+  concurrency: 6
+  timeout: 45
+
+langgraph:
+  checkpoint: memory
+  max_concurrency: 6
+  batch_pause_ms: 400
+  retries: 3

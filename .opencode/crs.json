@@ -1,0 +1,32 @@
+{
+  "crs_harness": {
+    "version": "1.0",
+    "initialized": "2026-08-25",
+    "modes": {
+      "caveman": "ACTIVE — evidence-before-synthesis via skills/curriculum-guard + master-prompt verify()",
+      "rtk": "ACTIVE — rag_engine hybrid + knowledge_graph OKF lineage",
+      "supermemory": "supermemory 3.59.0 — Supermemory Cloud session memory"
+    },
+    "skills": [
+      "master-architectural-system-prompt",
+      "curriculum-guard",
+      "math-formatter",
+      "historical-paper-tags",
+      "dual-mode-router",
+      "viz-generator",
+      "finetuning",
+      "graphify"
+    ],
+    "routing": {
+      "ingest": "deepseek_harness + langgraph Send fanout=6",
+      "explain_solve": "curriculum-guard 3-tier + rag_engine hybrid_search(limit=5) + knowledge_graph",
+      "paper_remedial": "historical-paper-tags prerequisite_nodes + companion_hint",
+      "math": "math-formatter KaTeX",
+      "visualize": "viz-generator rendererType JSON",
+      "codebase": "graphify explain/path OR codebase-mcp search_graph/trace_path",
+      "perf": "mesh_lb workers 3033/3036 + nginx app:9090",
+      "memory": "supermemory + gamification + spaced_repetition",
+      "finetune": "finetuning workflows/quickstart"
+    }
+  }
+}

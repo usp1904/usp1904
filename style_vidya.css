@@ -1,0 +1,49 @@
+/* VidyaGyaan — Enterprise Design Tokens (AY 2026-27) — Additive layer over style.css
+   Preserves existing --primary/--accent etc. Adds saffron/chakra/leaf + Fraunces/Inter.
+   Never overrides base layout catastrophically; scoped to .vg-* and global tricolor.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap');
+:root{
+  --saffron-100:#FFE4CC; --saffron-500:#FF9933; --saffron-900:#B8680F;
+  --cream-50:#FFFDF7;    --cream-100:#FAF3E0;   --cream-200:#F4E9CC;
+  --chakra-500:#3B5BDB;  --chakra-700:#243A9B;   --chakra-900:#1A2B5C;
+  --leaf-100:#D4F4DD;    --leaf-500:#138808;     --leaf-900:#0A5C00;
+  --gold-500:#FFC857;    --gold-100:#FFF1C9;
+  --vg-math:#6366F1; --vg-science:#10B981; --vg-social:#F59E0B; --vg-english:#EC4899; --vg-hindi:#EF4444;
+  --vg-ink:#1A2B5C; --vg-ink-soft:#4A5778; --vg-ink-mute:#8590AD;
+  --vg-line:rgba(26,43,92,.08); --vg-line-strong:rgba(26,43,92,.16);
+  --vg-shadow-sm:0 2px 8px rgba(26,43,92,.06); --vg-shadow-md:0 8px 24px rgba(26,43,92,.08); --vg-shadow-lg:0 16px 48px rgba(26,43,92,.12);
+  --font-display:'Fraunces',Georgia,serif; --font-body:'Inter',system-ui,sans-serif; --font-mono:'JetBrains Mono',ui-monospace,monospace; --font-hand:'Caveat',cursive; --font-hindi:'Noto Sans Devanagari',sans-serif;
+}
+/* Tricolor ribbon — top of every page */
+.vg-tricolor{height:4px;background:linear-gradient(90deg,var(--saffron-500) 0 33%,#fff 33% 66%,var(--leaf-500) 66% 100%);}
+/* Additive hero — only when .vg-hero used */
+.vg-hero{padding:48px 24px;background:radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,153,51,.12), transparent 60%), var(--cream-50);text-align:center;border-radius:16px;margin:16px 0;}
+.vg-hero h1{font-family:var(--font-display);font-weight:700;font-size:clamp(28px,4vw,42px);color:var(--vg-ink);line-height:1.1;}
+.vg-hero .accent{background:linear-gradient(135deg,var(--saffron-500),var(--gold-500));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.vg-hero .hindi{font-family:var(--font-hindi);}
+.vg-hero-sub{color:var(--vg-ink-soft);max-width:720px;margin:12px auto 0;line-height:1.6;}
+/* Pills */
+.pill{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.5px;}
+.pill-saffron{background:var(--saffron-100);color:var(--saffron-900);}
+.pill-leaf{background:var(--leaf-100);color:var(--leaf-900);}
+.pill-chakra{background:rgba(59,91,219,.12);color:var(--chakra-700);}
+.pill-gold{background:var(--gold-100);color:#8B6914;}
+/* Narrative cards */
+.narrative{background:#fff;border:1px solid var(--vg-line);border-radius:16px;padding:24px;box-shadow:var(--vg-shadow-sm);margin:16px 0;}
+.narrative h3{font-family:var(--font-display);color:var(--vg-ink);}
+.callout{background:linear-gradient(135deg,rgba(255,153,51,.06),rgba(19,136,8,.06));border-left:4px solid var(--saffron-500);padding:16px 20px;border-radius:0 12px 12px 0;margin:16px 0;}
+.callout-title{font-weight:700;color:var(--vg-ink);margin-bottom:6px;font-size:14px;}
+.callout-text{color:var(--vg-ink-soft);font-size:14px;line-height:1.6;}
+.katex-block{background:#FAFBFC;border:1px solid var(--vg-line);border-radius:12px;padding:16px;margin:12px 0;overflow-x:auto;}
+.guard-note{background:rgba(255,153,51,.08);border-left:4px solid #FF9933;padding:12px 16px;margin:16px 0;font-size:13px;border-radius:0 8px 8px 0;}
+/* Wireframe helper */
+.vg-grid{display:grid;gap:16px;}
+.vg-grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+/* Accessibility: focus visible */
+:focus-visible{outline:2px solid var(--chakra-500);outline-offset:2px;}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+/* Dark mode hint (optional, not forced) */
+@media (prefers-color-scheme: dark){
+  .katex-block{background:#0F1A3A;color:#E4E9F5;}
+}

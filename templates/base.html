@@ -10,8 +10,9 @@
 <meta property="og:description" content="{{ description }}" />
 <meta name="twitter:card" content="summary" />
 <link rel="manifest" href="/manifest.json">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>≡ƒôÜ</text></svg>">
 <link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style_vidya.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 :root {
@@ -53,21 +54,22 @@ body {
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}, {left: '$', right: '$', display: false}]});"></script>
 {{ extra_css | safe }}</head>
 <body class="{{ body_class }}">
+<div class="vg-tricolor" aria-hidden="true"></div>
 <div class="sticky-wrapper">
 <div class="gbar">
   <div class="gbar-inner">
-    <a href="/" class="gbar-brand">📚 AI Study Companion</a>
+    <a href="/" class="gbar-brand">≡ƒôÜ AI Study Companion</a>
     <div class="gbar-nav">
       <a href="/">Home</a>
-      <a href="/search">🔍 Search</a>
-      <a href="/tutor">🧠 Tutor</a>
-      <a href="/exams">🏆 Exams</a>
-      <a href="/about">ℹ️ About</a>
+      <a href="/search">≡ƒöì Search</a>
+      <a href="/tutor">≡ƒºá Tutor</a>
+      <a href="/exams">≡ƒÅå Exams</a>
+      <a href="/about">Γä╣∩╕Å About</a>
     </div>
     <div class="gbar-right">
-      <span class="xp-badge">⭐ <span id="xp-display">{{ xp }}</span> XP</span>
+      <span class="xp-badge">Γ¡É <span id="xp-display">{{ xp }}</span> XP</span>
 {% if user %}
-      <span class="user-badge">👤 {{ user.username }}</span>
+      <span class="user-badge">≡ƒæñ {{ user.username }}</span>
       <a href="/profile" class="gbar-link">Profile</a>
       <a href="#" onclick="fetch('/api/auth/logout',{method:'POST'}).then(()=>location.href='/')" class="gbar-link">Logout</a>
 {% elif auth_configured %}

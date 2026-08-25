@@ -1,0 +1,108 @@
+# Fixed docker-compose — IPv4/IPv6 clean + proper data syncing
+# - No IPv6 assumptions (host may lack v6); explicit 0.0.0.0 binding
+# - App binds 0.0.0.0:9090 internally; nginx upstreams use service name 'app', not 127.0.0.1
+# - Data volumes are named (not host bind) to avoid WAL lock & Windows↔Linux EOL issues
+# - SQLite is dev only; production uses PostgreSQL (Neon) via DATABASE_URL
+services:
+  app:
+    build: .
+    # Explicit IPv4 binding — prevents Docker trying [::]:9090 when host has no IPv6
+    ports:
+      - "0.0.0.0:${PORT:-9090}:9090"
+    environment:
+      - PORT=9090
+      - MODE=${MODE:-server}
+      - UVICORN_WORKERS=${UVICORN_WORKERS:-4}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///cbse_content.db}
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen3:latest}
+      - ALLOWED_HOSTS=*
+      - ENV=production
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Named volume for DB persistence — survives container rebuilds, no Windows lock issues
+      - cbse_data:/app/data
+      # Seed data read-only
+      - ./seed_data:/app/seed_data:ro
+      - ./templates:/app/templates:ro
+      - ./Syllabus_2026-27:/app/Syllabus_2026-27:ro
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    networks:
+      - cbse_net
+    # Prevent IPv6 inside app if host lacks it
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0  # set 1 to force IPv4-only if your host has no v6
+
+  ollama:
+    image: ollama/ollama:latest
+    profiles:
+      - local-llm
+    ports:
+      - "0.0.0.0:11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - cbse_net
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  nginx:
+    image: nginx:alpine
+    profiles:
+      - full-infra
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+    volumes:
+      - ./nginx.fixed.conf:/etc/nginx/conf.d/default.conf:ro
+      - certs:/etc/letsencrypt:ro
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - cbse_net
+
+  # External sync helper — one-shot: dumps SQLite -> PostgreSQL or vice versa
+  db-sync:
+    image: python:3.11-slim
+    profiles:
+      - sync
+    volumes:
+      - cbse_data:/data
+      - .:/app:ro
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SQLITE_PATH=/data/cbse_content.db
+    command: ["python", "/app/tools/sync_db.py"]
+    networks:
+      - cbse_net
+
+volumes:
+  cbse_data:
+    driver: local
+  ollama_data:
+  certs:
+
+networks:
+  cbse_net:
+    driver: bridge
+    # IPv4-only bridge — avoids :: bind failures on Windows hosts without IPv6
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: 10.20.30.0/24

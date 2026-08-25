@@ -1,4 +1,4 @@
-"""FastAPI production server — replaces ThreadingHTTPServer.
+"""FastAPI production server ΓÇö replaces ThreadingHTTPServer.
 
 Supports:
   - Async AI calls (non-blocking LLM queries)
@@ -72,7 +72,7 @@ SEARCH_IDX = None
 LLM = None
 
 
-# ─── Rate Limiter ───────────────────────────────────────────────────────────
+# ΓöÇΓöÇΓöÇ Rate Limiter ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 
 def _rate_limit_cleanup():
     now_window = int(time.time() / RATE_LIMIT_WINDOW)
@@ -104,7 +104,7 @@ def rate_limit(requests_per_min: int = 60):
     return decorator
 
 
-# ─── Helpers ────────────────────────────────────────────────────────────────
+# ΓöÇΓöÇΓöÇ Helpers ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 
 def esc_js(s):
     if s is None:
@@ -191,7 +191,7 @@ def _build_breadcrumb(items):
             parts.append(f'<a href="{url}">{htmlmod.escape(label)}</a>')
         else:
             parts.append(htmlmod.escape(label))
-    return '<span class="sep">›</span>'.join(parts)
+    return '<span class="sep">ΓÇ║</span>'.join(parts)
 
 
 def _get_topics(conn, chapter_id):
@@ -225,8 +225,8 @@ def _pomelli_hero_svg():
   <circle cx="420" cy="70" r="14" fill="#2ecc71" opacity="0.12"><animate attributeName="r" values="14;18;12;14" dur="3.5s" repeatCount="indefinite"/></circle>
   <circle cx="450" cy="45" r="10" fill="#9b59b6" opacity="0.15"><animate attributeName="r" values="10;14;8;10" dur="3s" repeatCount="indefinite"/></circle>
   <text x="530" y="55" font-family="sans-serif" font-size="20" font-weight="700" fill="#1a1a2e">AI Study Companion</text>
-  <text x="530" y="82" font-family="sans-serif" font-size="13" fill="#666">CBSE · AP Board · TS Board · Class V–XII</text>
-  <text x="530" y="100" font-family="sans-serif" font-size="11" fill="#999">English · हिन्दी · తెలుగు</text>
+  <text x="530" y="82" font-family="sans-serif" font-size="13" fill="#666">CBSE ┬╖ AP Board ┬╖ TS Board ┬╖ Class VΓÇôXII</text>
+  <text x="530" y="100" font-family="sans-serif" font-size="11" fill="#999">English ┬╖ αñ╣αñ┐αñ¿αÑìαñªαÑÇ ┬╖ α░ñα▒åα░▓α▒üα░ùα▒ü</text>
   <g transform="translate(700,20)" opacity="0.3">
     <path d="M30 30 L70 30 L90 60 L50 60 Z" fill="#4a90d9"/>
     <path d="M10 60 L50 60 L70 90 L30 90 Z" fill="#2ecc71"/>
@@ -239,7 +239,7 @@ def _get_chapters(conn, subject_id):
     return conn.query("SELECT * FROM chapters WHERE subject_id = ? ORDER BY num", (subject_id,))
 
 
-# ─── Lifespan ───────────────────────────────────────────────────────────────
+# ΓöÇΓöÇΓöÇ Lifespan ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -291,7 +291,7 @@ async def lifespan(app: FastAPI):
     log.info("Server shutting down.")
 
 
-# ─── FastAPI App ────────────────────────────────────────────────────────────
+# ΓöÇΓöÇΓöÇ FastAPI App ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 
 app = FastAPI(
     title="AI Study Companion",
@@ -308,9 +308,90 @@ app.add_middleware(security.SecurityHeadersMiddleware)
 app.add_middleware(security.CSRFSafeMiddleware)
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+
+# ΓöÇΓöÇΓöÇ LangGraph + DeepSeek Ingestion ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+from pydantic import BaseModel as _PydanticBase
+class IngestRequest(_PydanticBase):
+    urls: list[str] = []
+    use_file: bool = False  # if true, reads D:\\StudyMaterials.txt byjus urls
+    max_concurrency: int = 6
+    provider: str = "deepseek"  # deepseek | mistral | offline
+
+@app.post("/api/ingest/urls")
+async def api_ingest_urls(req: IngestRequest, request: Request):
+    """LangGraph + DeepSeek harness for multiple URLs / vast content.
+    Handles: fetch (httpx, retry 429), clean, DeepSeek neutralize_rewrite, verify 2026-27, chunk validate, DB insert, FTS+index rebuild.
+    Concurrency batched, rate-limit aware. Returns stats."""
+    import time, asyncio
+    urls = req.urls or []
+    if req.use_file:
+        try:
+            with open(r"D:\StudyMaterials.txt", encoding="utf-8", errors="replace") as f:
+                file_urls = [l.strip() for l in f if "byjus.com" in l.lower()]
+                # dedup
+                seen=set()
+                uniq=[]
+                for u in file_urls:
+                    if u not in seen:
+                        seen.add(u); uniq.append(u)
+                urls = uniq
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to read D:/StudyMaterials.txt: {e}")
+    if not urls:
+        raise HTTPException(status_code=400, detail="No URLs provided. Use urls:[...] or use_file:true")
+    # offload blocking LangGraph to threadpool
+    def _run():
+        try:
+            from langgraph_pipeline import run_pipeline
+            return run_pipeline(urls, max_concurrency=req.max_concurrency)
+        except Exception as e:
+            import traceback
+            return {"error": str(e), "traceback": traceback.format_exc()[:3000], "ingested":0}
+    loop = asyncio.get_event_loop()
+    stats = await loop.run_in_executor(None, _run)
+    if "error" in stats:
+        return JSONResponse({"status":"error", **stats}, status_code=500)
+    return {"status":"ok", "provider": req.provider, "total": len(urls), **stats}
+
+@app.get("/api/ingest/status")
+async def api_ingest_status():
+    try:
+        db = get_db()
+        keys = ["langgraph_deepseek_last_run","byjus_supplementary_ingested_2026_27","syllabus_year","quiz_alignment_2026_27"]
+        out={}
+        for k in keys:
+            row=db.query_one("SELECT value FROM content_meta WHERE key=?", (k,))
+            out[k]=row["value"][:800] if row and row["value"] else None
+        sup_cnt=db.query_one("SELECT COUNT(*) as cnt FROM chunks WHERE content_type='supplementary'")
+        out["supplementary_chunks"]=sup_cnt["cnt"] if sup_cnt else 0
+        sup_t=db.query_one("SELECT COUNT(*) as cnt FROM topics WHERE title LIKE '%Supplementary%'")
+        out["supplementary_topics"]=sup_t["cnt"] if sup_t else 0
+        out["deepseek_available"]=False
+        try:
+            from deepseek_harness import get_harness
+            out["deepseek_available"]=get_harness().available
+            out["deepseek_backend"]=get_harness().backend_name
+        except: pass
+        return out
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/api/ingest/deepseek-test")
+async def api_deepseek_test(q: str = "Explain Real Numbers FTA"):
+    try:
+        from deepseek_harness import get_harness
+        h=get_harness()
+        if not h.available:
+            return {"available": False, "message": "Set DEEPSEEK_API_KEY env to enable. Fallback active.", "sample": h.neutralize_rewrite("Test Real Numbers content about Euclid's lemma a=bq+r", "Real Numbers", "Mathematics")[:800]}
+        res=h.query(q, system_prompt="You are a CBSE expert. Answer concisely.", max_tokens=256)
+        return {"available": True, "backend": h.backend_name, "model": h.model, "result": res[:2000]}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 # HEALTH & STATUS
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
 @app.get("/health")
 async def health():
@@ -514,19 +595,19 @@ async def view_logs():
     return {"error": "No log files found", "searched": log_files}
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 # PROFILE & PROGRESS (protected)
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
 
 @app.get("/profile", response_class=HTMLResponse)
 async def profile_page(user: Optional[dict] = Depends(get_current_user)):
     if not user:
         return _render(
-            title="Profile — AI Study Companion",
+            title="Profile ΓÇö AI Study Companion",
             content=f"""
             <div class="card" style="text-align:center;padding:3rem 2rem;">
-                <h2>🔒 Profile</h2>
+                <h2>≡ƒöÆ Profile</h2>
                 <p style="margin:1rem 0;color:#666;">Sign in to view your profile, progress, and achievements.</p>
                 <a href="/login" class="btn-primary" style="display:inline-block;padding:0.8rem 2rem;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;">Sign In</a>
                 <span style="margin:0 0.5rem">or</span>
@@ -535,10 +616,10 @@ async def profile_page(user: Optional[dict] = Depends(get_current_user)):
             """,
         )
     return _render(
-        title=f"Profile — {user['username']} | AI Study Companion",
+        title=f"Profile ΓÇö {user['username']} | AI Study Companion",
         content=f"""
         <div class="card">
-            <h2>👤 {user['username']}</h2>
+            <h2>≡ƒæñ {user['username']}</h2>
             <p>Email: {user['email']}</p>
             <p>User ID: {user['id']}</p>
         </div>
@@ -552,7 +633,7 @@ async def progress_page(user: dict = Depends(require_user)):
         title="My Progress | AI Study Companion",
         content="""
         <div class="card">
-            <h2>📊 Learning Progress</h2>
+            <h2>≡ƒôè Learning Progress</h2>
             <p>Progress tracking coming soon.</p>
         </div>
         """,
@@ -573,16 +654,16 @@ async def leaderboard_page(user: dict = Depends(get_current_user)):
         title="Leaderboard | AI Study Companion",
         content=f"""
         <div class="card">
-            <h2>🏆 Leaderboard</h2>
+            <h2>≡ƒÅå Leaderboard</h2>
             <table class="data-table"><tr><th>#</th><th>User</th><th>XP</th><th>Level</th></tr>{rows}</table>
         </div>
         """,
     )
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 # AUTH (Supabase JWT)
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
 from pydantic import BaseModel
 
@@ -599,7 +680,7 @@ async def login_page():
         title="Login | AI Study Companion",
         content="""
         <div class="card" style="max-width:400px;margin:2rem auto;">
-            <h2>🔐 Login</h2>
+            <h2>≡ƒöÉ Login</h2>
             <form id="login-form" onsubmit="return doLogin(event)">
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -607,7 +688,7 @@ async def login_page():
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required class="form-input" placeholder="••••••••">
+                    <input type="password" id="password" name="password" required class="form-input" placeholder="ΓÇóΓÇóΓÇóΓÇóΓÇóΓÇóΓÇóΓÇó">
                 </div>
                 <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
                 <p style="text-align:center;margin-top:1rem;">Don't have an account? <a href="/signup">Sign up</a></p>
@@ -646,7 +727,7 @@ async def signup_page():
         title="Sign Up | AI Study Companion",
         content="""
         <div class="card" style="max-width:400px;margin:2rem auto;">
-            <h2>📝 Create Account</h2>
+            <h2>≡ƒô¥ Create Account</h2>
             <form id="signup-form" onsubmit="return doSignup(event)">
                 <div class="form-group">
                     <label for="su-email">Email</label>
@@ -760,27 +841,124 @@ async def style_css():
     from app import CSS
     return Response(content=CSS, media_type="text/css")
 
+@app.get("/style_vidya.css")
+async def style_vidya_css():
+    p = "style_vidya.css"
+    if os.path.exists(p):
+        return FileResponse(p, media_type="text/css")
+    return Response(content="/* vidya tokens missing */", media_type="text/css")
+
 
 @app.get("/manifest.json")
 async def manifest_json():
     if os.path.exists("manifest.json"):
         return FileResponse("manifest.json")
     manifest = {
-        "name": "Class X Education Platform",
-        "short_name": "Class X Edu",
-        "description": "CBSE, AP & TS Board Class X study platform",
+        "name": "VidyaGyaan ΓÇö CBSE Class X (2026-27) AI Companion",
+        "short_name": "VidyaGyaan",
+        "description": "Enterprise CBSE Class X AI companion ΓÇö NCERT 2026-27 verified, 5 narrative engines, streaks, offline PWA",
         "start_url": "/",
         "display": "standalone",
-        "background_color": "#f0f2f5",
-        "theme_color": "#1a1a2e",
+        "background_color": "#FFFDF7",
+        "theme_color": "#FF9933",
         "orientation": "any",
+        "icons": [{"src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>\U0001f4da</text></svg>", "sizes": "192x192", "type": "image/svg+xml"}],
+        "categories": ["education"],
+        "lang": "en-IN"
     }
     return JSONResponse(content=manifest)
 
+# ΓöÇΓöÇΓöÇ VidyaGyaan Enterprise APIs (additive, never breaks existing) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+# Observability init (LangSmith) ΓÇö import early so traces capture everything
+try:
+    import services.observability.langsmith_setup  # noqa: F401 ΓÇö init on import
+except Exception:
+    pass
 
-# ═══════════════════════════════════════════════════════════════════════════
+@app.get("/api/vg/health")
+async def vg_health():
+    try:
+        db = get_db()
+        enterprise_ok = True
+        try:
+            db.query_one("SELECT COUNT(*) as c FROM okf_entities")
+        except Exception:
+            enterprise_ok = False
+        return {"status": "ok", "enterprise": enterprise_ok, "curriculum_guard": "v3", "narratives": ["theorem_analogy","detective_story","cinematic","family_drama","soul_music"], "okf": "v0.2", "gdt": "Google Document Tree"}
+    except Exception as e:
+        return {"status": "degraded", "error": str(e)[:300]}
+
+@app.post("/api/vg/guard/check")
+async def vg_guard_check(request: Request):
+    try:
+        body = await request.json()
+        text = body.get("text","")
+        subject = body.get("subject","")
+        from services.curriculum_guard.guard_v3 import CurriculumGuardV3
+        g = CurriculumGuardV3()
+        passed, reason, aligned = g.check(text, subject)
+        return {"passed": passed, "reason": reason, "aligned_node": aligned}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/vg/narrative")
+async def vg_narrative(request: Request):
+    try:
+        body = await request.json()
+        title = body.get("title","CBSE Topic")
+        content = body.get("content","")
+        subject = body.get("subject","MA")
+        mode = body.get("mode","board")
+        from agents.orchestrator import orchestrator
+        st = {"messages": [{"content": content}], "subject": subject, "intent": "concept" if mode=="board" else "solve", "attempt": 0}
+        # Use orchestrator for full flow, or direct engine
+        if not content:
+            content = title
+        # Direct engine path for speed
+        from agents.orchestrator import infer_engine, ENGINE_MAP
+        key = infer_engine(subject, content)
+        engine = ENGINE_MAP.get(key)
+        result = engine.render(title, content, mode=mode)
+        # Guard enforce
+        from services.curriculum_guard.guard_v3 import CurriculumGuardV3
+        g = CurriculumGuardV3()
+        html = g.enforce_three_tier(result["html"])
+        return {"html": html, "visualizations": result["visualizations"], "engine": key, "subject": subject}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/api/vg/okf/{graph_id}")
+async def vg_okf(graph_id: str):
+    try:
+        from services.graph_engineering.okf_schema import load_graph
+        g = load_graph(graph_id)
+        if not g:
+            return {"error": "graph not found", "graph_id": graph_id}
+        return g.to_jsonld()
+    except Exception as e:
+        return {"error": str(e)[:400]}
+
+@app.get("/api/vg/enterpriseschema")
+async def vg_schema():
+    try:
+        db = get_db()
+        tables = [r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'okf_%' OR name IN ('students','theorems','experiments','history_scenes','social_episodes','streaks','daily_quests')").fetchall()] if hasattr(db.execute, '__call__') else []
+        # fallback count
+        counts = {}
+        for t in ["okf_entities","okf_relations","students","theorems","experiments","history_scenes","social_episodes","streaks","daily_quests"]:
+            try:
+                row = db.query_one(f"SELECT COUNT(*) as c FROM {t}")
+                counts[t] = row["c"] if row else 0
+            except Exception:
+                counts[t] = "missing"
+        return {"tables": counts, "spec": "VidyaGyaan AY 2026-27"}
+    except Exception as e:
+        return {"error": str(e)[:400]}
+
+
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 # PAGE ROUTES
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
 @app.get("/", response_class=HTMLResponse)
 async def home():
@@ -821,7 +999,7 @@ async def home():
         if not rows:
             continue
         tables += f"""<div class="section board-table" data-board="{b['id']}">
-            <h2>📘 {b['name']}</h2>
+            <h2>≡ƒôÿ {b['name']}</h2>
             <div style="overflow-x:auto;">
             <table class="data-table">
                 <thead><tr><th>Subject</th><th>Language</th><th>Class</th><th>Chapters</th><th>Topics</th><th></th></tr></thead>
@@ -830,7 +1008,7 @@ async def home():
             </div>
         </div>"""
 
-    medium_opts = '<option value="">All Mediums</option><option value="English">English</option><option value="Hindi">हिन्दी (Hindi)</option><option value="Telugu">తెలుగు (Telugu)</option><option value="Tamil">தமிழ் (Tamil)</option><option value="Kannada">ಕನ್ನಡ (Kannada)</option><option value="Bengali">বাংলা (Bengali)</option><option value="Marathi">मराठी (Marathi)</option><option value="Gujarati">ગુજરાતી (Gujarati)</option><option value="Malayalam">മലയാളം (Malayalam)</option><option value="Odia">ଓଡ଼ିଆ (Odia)</option><option value="Punjabi">ਪੰਜਾਬੀ (Punjabi)</option><option value="Assamese">অসমীয়া (Assamese)</option><option value="Urdu">اردو (Urdu)</option>'
+    medium_opts = '<option value="">All Mediums</option><option value="English">English</option><option value="Hindi">αñ╣αñ┐αñ¿αÑìαñªαÑÇ (Hindi)</option><option value="Telugu">α░ñα▒åα░▓α▒üα░ùα▒ü (Telugu)</option><option value="Tamil">α«ñα««α«┐α«┤α»ì (Tamil)</option><option value="Kannada">α▓òα▓¿α│ìα▓¿α▓í (Kannada)</option><option value="Bengali">αª¼αª╛αªéαª▓αª╛ (Bengali)</option><option value="Marathi">αñ«αñ░αñ╛αñáαÑÇ (Marathi)</option><option value="Gujarati">α¬ùα½üα¬£α¬░α¬╛α¬ñα½Ç (Gujarati)</option><option value="Malayalam">α┤«α┤▓α┤»α┤╛α┤│α┤é (Malayalam)</option><option value="Odia">α¼ôα¼íα¼╝α¼┐α¼å (Odia)</option><option value="Punjabi">α¿¬α⌐░α¿£α¿╛α¿¼α⌐Ç (Punjabi)</option><option value="Assamese">αªàαª╕αª«αºÇαª»αª╝αª╛ (Assamese)</option><option value="Urdu">╪º╪▒╪»┘ê (Urdu)</option>'
     subject_opts = '<option value="">All Subjects</option>'
     seen_subjects = set()
     for b in board_tree:
@@ -886,13 +1064,13 @@ async def home():
 
     pomelli_hero = _pomelli_hero_svg()
     content = f"""<div class="section">{pomelli_hero}
-<h2>📚 AI Study Companion</h2>
-<p style="color:#666;margin-bottom:1rem;">Multiple boards · Indian languages · Class V–XII · AI-powered learning</p>
+<h2>≡ƒôÜ AI Study Companion</h2>
+<p style="color:#666;margin-bottom:1rem;">Multiple boards ┬╖ Indian languages ┬╖ Class VΓÇôXII ┬╖ AI-powered learning</p>
 <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;">
-<a href="/search" class="tts-btn">🔍 Search Topics</a>
-<a href="/exams" class="tts-btn">🏆 Mock Exams</a>
-<a href="/profile" class="tts-btn">👤 Profile</a>
-<a href="/ai" class="tts-btn">🤖 AI Studio</a>
+<a href="/search" class="tts-btn">≡ƒöì Search Topics</a>
+<a href="/exams" class="tts-btn">≡ƒÅå Mock Exams</a>
+<a href="/profile" class="tts-btn">≡ƒæñ Profile</a>
+<a href="/ai" class="tts-btn">≡ƒñû AI Studio</a>
 </div></div>{filter_panel}
 <div id="home-tables">{tables}</div>"""
     return HTMLResponse(_render(title="AI Study Companion - Home", content=content))
@@ -927,8 +1105,8 @@ async def search_page(request: Request):
             for r in results:
                 topic_url = f"/topic/{r.get('id','')}"
                 results_html += f"""<tr>
-                    <td><a href="{topic_url}">{htmlmod.escape(r.get('title',''))}</a></td>
-                    <td style="color:var(--text-muted);font-size:0.85rem;">{htmlmod.escape(r.get('chapter_title',''))}</td>
+                    <td><a href="{topic_url}">{htmlmod.escape(r.get('title') or '')}</a></td>
+                    <td style="color:var(--text-muted);font-size:0.85rem;">{htmlmod.escape(r.get('chapter_title') or '')}</td>
                     <td style="color:var(--text-muted);font-size:0.8rem;">{r.get('score', 0)}</td>
                     <td><a href="{topic_url}" class="tts-btn" style="padding:0.2rem 0.6rem;font-size:0.75rem;">Open</a></td>
                 </tr>"""
@@ -940,7 +1118,7 @@ async def search_page(request: Request):
 
     content = f"""<div class="breadcrumb">{_build_breadcrumb([("Home", "/"), ("Search", None)])}</div>
 <div class="section">
-<h2>🔍 Search Topics</h2>
+<h2>≡ƒöì Search Topics</h2>
 <form method="get" action="/search" class="search-form">
     <input type="text" name="q" value="{htmlmod.escape(q)}" placeholder="Search topics, formulas, concepts..." style="flex:1;min-width:200px;padding:0.7rem;border:2px solid var(--border);border-radius:8px;font-size:0.9rem;">
     <select name="board" id="search-board">
@@ -990,7 +1168,7 @@ async def tutor_hub():
     if not rows:
         rows = '<p style="text-align:center;padding:2rem;color:#666;">No topics available yet.</p>'
     content = f"""<div class="breadcrumb">{_build_breadcrumb([("Home", "/"), ("AI Tutor Hub", None)])}</div>
-<div class="section"><h2>🧠 AI Tutor Hub</h2><p>Select a chapter to start a question-based learning session.</p>{rows}</div>"""
+<div class="section"><h2>≡ƒºá AI Tutor Hub</h2><p>Select a chapter to start a question-based learning session.</p>{rows}</div>"""
     return HTMLResponse(_render(title="AI Tutor Hub - AI Study Companion", content=content))
 
 
@@ -1019,7 +1197,7 @@ async def tutor_page(topic_id: str):
         ("AI Tutor", None)
     ])}</div>
 <div class="section" id="tutor-section">
-<h2>🧠 AI Tutor: {topic['title']}</h2>
+<h2>≡ƒºá AI Tutor: {topic['title']}</h2>
 <p style="color:#666;margin-bottom:1rem;">Question-Based Learning</p>
 <div id="tutor-progress" style="margin-bottom:1rem;font-size:0.85rem;color:var(--text-muted);">Question 1 of {len(questions)}</div>
 <div id="tutor-content">
@@ -1048,7 +1226,7 @@ function submitTutorAnswer(sessionId){{
     }}).then(r=>r.json()).then(data=>{{
         var fb = document.getElementById('tutor-feedback');
         fb.style.display='block';
-        fb.innerHTML='<div class="tutor-feedback-card"><h4 style="margin-top:0;">Your Answer</h4><p style="background:#f8f9ff;padding:0.8rem;border-radius:6px;">'+answer.replace(/</g,'&lt;')+'</p><h4>How did you do?</h4><div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem;"><button class="tts-btn" style="background:#dcfce7;" onclick="selfAssess('+data.answer_id+',\\'correct\\','+sessionId+')">✅ Got it right</button><button class="tts-btn" style="background:#fef9c3;" onclick="selfAssess('+data.answer_id+',\\'partial\\','+sessionId+')">🟡 Partially correct</button><button class="tts-btn" style="background:#fee2e2;" onclick="selfAssess('+data.answer_id+',\\'wrong\\','+sessionId+')">❌ Needs work</button></div></div>';
+        fb.innerHTML='<div class="tutor-feedback-card"><h4 style="margin-top:0;">Your Answer</h4><p style="background:#f8f9ff;padding:0.8rem;border-radius:6px;">'+answer.replace(/</g,'&lt;')+'</p><h4>How did you do?</h4><div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem;"><button class="tts-btn" style="background:#dcfce7;" onclick="selfAssess('+data.answer_id+',\\'correct\\','+sessionId+')">Γ£à Got it right</button><button class="tts-btn" style="background:#fef9c3;" onclick="selfAssess('+data.answer_id+',\\'partial\\','+sessionId+')">≡ƒƒí Partially correct</button><button class="tts-btn" style="background:#fee2e2;" onclick="selfAssess('+data.answer_id+',\\'wrong\\','+sessionId+')">Γ¥î Needs work</button></div></div>';
         document.getElementById('tutor-answer').disabled=true;
     }});
 }}
@@ -1071,7 +1249,7 @@ function selfAssess(answerId,assessment,sessionId){{
             fetch('/api/tutor/complete',{{
                 method:'POST', headers:{{'Content-Type':'application/x-www-form-urlencoded'}},
                 body:'session_id='+sessionId
-            }}).then(r=>r.json()).then(d=>{{ document.getElementById('tutor-content').innerHTML='<div style="text-align:center;padding:2rem;"><h3>🎉 Session Complete!</h3><p>+'+d.xp+' XP</p><a class="tts-btn" href="/topic/'+topicId+'">Back to Topic</a></div>'; }});
+            }}).then(r=>r.json()).then(d=>{{ document.getElementById('tutor-content').innerHTML='<div style="text-align:center;padding:2rem;"><h3>≡ƒÄë Session Complete!</h3><p>+'+d.xp+' XP</p><a class="tts-btn" href="/topic/'+topicId+'">Back to Topic</a></div>'; }});
         }}
     }});
 }}
@@ -1090,7 +1268,7 @@ function skipTutorQuestion(sessionId){{
                 fetch('/api/tutor/complete',{{
                     method:'POST', headers:{{'Content-Type':'application/x-www-form-urlencoded'}},
                     body:'session_id='+sessionId
-                }}).then(r=>r.json()).then(d=>{{ document.getElementById('tutor-content').innerHTML='<div style="text-align:center;padding:2rem;"><h3>🎉 Session Complete!</h3><p>+'+d.xp+' XP</p><a class="tts-btn" href="/topic/'+topicId+'">Back to Topic</a></div>'; }}));
+                }}).then(r=>r.json()).then(d=>{{ document.getElementById('tutor-content').innerHTML='<div style="text-align:center;padding:2rem;"><h3>≡ƒÄë Session Complete!</h3><p>+'+d.xp+' XP</p><a class="tts-btn" href="/topic/'+topicId+'">Back to Topic</a></div>'; }}));
             }}
         }});
     }}
@@ -1115,7 +1293,7 @@ async def board_page(board_id: str):
         ch_links = "".join(f'<a href="/chapter/{ch["id"]}" class="chunk-view"><div class="chunk-title">Ch {ch["num"]}: {ch["title"]}</div></a>' for ch in chs)
         rows += f'<div class="book-section"><h3><a href="/board/{board_id}/{s["id"]}" style="color:var(--primary);">{s["name"]}</a></h3><div style="margin-bottom:0.8rem;">{ch_links}</div></div>'
     content = f"""<div class="breadcrumb">{_build_breadcrumb([("Home", "/"), (board_id.upper(), None)])}</div>
-<div class="section"><h2>📘 {board_id.upper()} Board</h2><p style="color:#666;margin-bottom:1rem;">Select a subject to begin learning.</p>{rows}</div>"""
+<div class="section"><h2>≡ƒôÿ {board_id.upper()} Board</h2><p style="color:#666;margin-bottom:1rem;">Select a subject to begin learning.</p>{rows}</div>"""
     return HTMLResponse(_render(title=f"{board_id.upper()} Board - AI Study Companion", content=content))
 
 
@@ -1212,10 +1390,10 @@ async def chapter_page(chapter_id: str):
 <h2><a href="/topic/{t['id']}" style="color:var(--primary);">{htmlmod.escape(t['title'])}</a></h2>
 {content_html or chunks_html}
 <div class="chapter-actions">
-<a href="/topic/{t['id']}" class="tts-btn" style="font-size:0.8rem;">📖 Study</a>
-<a href="/tutor/{t['id']}" class="tts-btn" style="font-size:0.8rem;">🧠 AI Tutor</a>
-<a href="/quiz/{chapter_id}" class="tts-btn" style="font-size:0.8rem;">📝 Quiz</a>
-<a href="/interactives/matching/{t['id']}" class="tts-btn" style="font-size:0.8rem;">🔄 Matching</a>
+<a href="/topic/{t['id']}" class="tts-btn" style="font-size:0.8rem;">≡ƒôû Study</a>
+<a href="/tutor/{t['id']}" class="tts-btn" style="font-size:0.8rem;">≡ƒºá AI Tutor</a>
+<a href="/quiz/{chapter_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒô¥ Quiz</a>
+<a href="/interactives/matching/{t['id']}" class="tts-btn" style="font-size:0.8rem;">≡ƒöä Matching</a>
 </div></div>"""
 
 
@@ -1228,12 +1406,12 @@ async def chapter_page(chapter_id: str):
         (f"Ch {chapter['num']}: {chapter['title']}", None)
     ])}</div>
 <div class="section">
-<h2>📖 Ch {chapter['num']}: {chapter['title']}</h2>
+<h2>≡ƒôû Ch {chapter['num']}: {chapter['title']}</h2>
 <p style="color:#666;margin-bottom:1rem;">{subject["name"] if subject else ""}</p>
 <div class="chapter-actions">
-<a href="/notes/{chapter_id}" class="tts-btn" style="font-size:0.8rem;">📝 Notes</a>
-<a href="/revision/{chapter_id}" class="tts-btn" style="font-size:0.8rem;">🔄 Revision</a>
-<a href="/quiz/{chapter_id}" class="tts-btn" style="font-size:0.8rem;">📝 Quiz</a>
+<a href="/notes/{chapter_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒô¥ Notes</a>
+<a href="/revision/{chapter_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒöä Revision</a>
+<a href="/quiz/{chapter_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒô¥ Quiz</a>
 </div>
 </div>{topics_html}"""
     return HTMLResponse(_render(title=f"Ch {chapter['num']}: {chapter['title']} - AI Study Companion", content=content))
@@ -1247,7 +1425,7 @@ def format_math_content(text):
     # 1. Theorem Cards
     html = re.sub(
         r'(<p>)?<strong>(Theorem|Lemma)\b([^:]*):?</strong>(.*?)(</p>)?',
-        r'<div class="theorem-card"><div class="theorem-title">📐 \2\3</div><div class="theorem-body">\4</div></div>',
+        r'<div class="theorem-card"><div class="theorem-title">≡ƒôÉ \2\3</div><div class="theorem-body">\4</div></div>',
         html,
         flags=re.DOTALL | re.IGNORECASE
     )
@@ -1255,7 +1433,7 @@ def format_math_content(text):
     # 2. Key Tips/Memory Aids Cards
     html = re.sub(
         r'(<p>)?<strong>(Key points to remember|Memory aid|Board Exam Tip|Tip)\b([^:]*):?</strong>(.*?)(</p>)?',
-        r'<div class="concept-tip-card"><div class="concept-tip-title">💡 \2\3</div><div>\4</div></div>',
+        r'<div class="concept-tip-card"><div class="concept-tip-title">≡ƒÆí \2\3</div><div>\4</div></div>',
         html,
         flags=re.DOTALL | re.IGNORECASE
     )
@@ -1282,14 +1460,14 @@ def build_math_cheat_sheet(content, chunks):
     lines = all_text.split("\n")
     for line in lines:
         if "=" in line and any(x in line.lower() for x in ["sin", "cos", "tan", "sec", "cosec", "cot", "log", "hcf", "lcm", "area", "volume", "perimeter", "mean", "mode", "median", "probability", "d_i", "f_i", "x_i", "u_i", "a_i", "r^2", "pi", "a = bq"]):
-            line_clean = line.strip("•-* ").strip()
+            line_clean = line.strip("ΓÇó-* ").strip()
             if line_clean and len(line_clean) < 150 and line_clean not in [f if isinstance(f, str) else f[0] for f in formulas]:
                 formulas.append((line_clean, True))
                 
     if not formulas:
-        return f'<div class="concept-tip-card"><div class="concept-tip-title">⚡ Formula Sheet</div><p>Refer to the Concept Explainer tab for key equations.</p></div>'
+        return f'<div class="concept-tip-card"><div class="concept-tip-title">ΓÜí Formula Sheet</div><p>Refer to the Concept Explainer tab for key equations.</p></div>'
         
-    html = '<div class="section"><h3>⚡ Key Formulas & Reference Sheet</h3><p style="color:#666;margin-bottom:1.5rem;">Quick reference formulas and relationships for this topic.</p>'
+    html = '<div class="section"><h3>ΓÜí Key Formulas & Reference Sheet</h3><p style="color:#666;margin-bottom:1.5rem;">Quick reference formulas and relationships for this topic.</p>'
     for idx, item in enumerate(formulas):
         is_plain = False
         if isinstance(item, tuple):
@@ -1337,8 +1515,8 @@ def format_solved_problem(p, idx):
         
     return f"""
     <div class="solved-problem-card">
-        <div class="solved-problem-header" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open'); var sign = this.querySelector('.sign'); if (sign) sign.textContent = this.classList.contains('open') ? '−' : '+';">
-            <span>❓ Question {idx}: {htmlmod.escape(p.get('problem_text', '')[:300])}...</span>
+        <div class="solved-problem-header" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open'); var sign = this.querySelector('.sign'); if (sign) sign.textContent = this.classList.contains('open') ? 'ΓêÆ' : '+';">
+            <span>Γ¥ô Question {idx}: {htmlmod.escape(p.get('problem_text', '')[:300])}...</span>
             <span class="sign" style="font-size:1.2rem; color:var(--accent); font-weight:bold;">+</span>
         </div>
         <div class="solved-problem-body">
@@ -1351,7 +1529,7 @@ def format_solved_problem(p, idx):
                 {steps_html}
             </div>
             <div class="concept-tip-card" style="margin-top: 1rem; margin-bottom: 0;">
-                <div class="concept-tip-title">🛡️ Exam Tip</div>
+                <div class="concept-tip-title">≡ƒ¢í∩╕Å Exam Tip</div>
                 <p>Write down every calculation step and cite the underlying theorem (e.g. Euclid's Division Lemma) to earn full step-marks in exams.</p>
             </div>
         </div>
@@ -1375,7 +1553,7 @@ def format_science_content(text):
     # 2. Activity / Experiment boxes
     html = re.sub(
         r'(<p>)?<strong>(Activity\s*\d+\.\d+|Experiment\s*\d+\.\d+)\b([^:]*):?</strong>(.*?)(</p>)?',
-        r'<div class="science-activity-card"><div class="activity-title">🧪 \2\3</div><div class="activity-section-content">\4</div></div>',
+        r'<div class="science-activity-card"><div class="activity-title">≡ƒº¬ \2\3</div><div class="activity-section-content">\4</div></div>',
         html,
         flags=re.DOTALL | re.IGNORECASE
     )
@@ -1383,7 +1561,7 @@ def format_science_content(text):
     # 3. Science tips and safety alerts
     html = re.sub(
         r'(<p>)?<strong>(Key points to remember|Safety Precautions|Observation|Inference|Conclusion|Tip)\b([^:]*):?</strong>(.*?)(</p>)?',
-        r'<div class="concept-tip-card" style="border-left-color:#0d9488;"><div class="concept-tip-title" style="color:#0f766e;">💡 \2\3</div><div>\4</div></div>',
+        r'<div class="concept-tip-card" style="border-left-color:#0d9488;"><div class="concept-tip-title" style="color:#0f766e;">≡ƒÆí \2\3</div><div>\4</div></div>',
         html,
         flags=re.DOTALL | re.IGNORECASE
     )
@@ -1395,14 +1573,14 @@ def build_science_experiment_lab(content, chunks):
     activities = re.findall(r'(Activity\s*\d+\.\d+|Experiment\s*\d+\.\d+)(.*?)(?=(?:Activity\s*\d+\.\d+|Experiment\s*\d+\.\d+)|$)', all_text, re.DOTALL | re.IGNORECASE)
     
     if not activities:
-        return '<div class="concept-tip-card" style="border-left-color:#0d9488;"><div class="concept-tip-title" style="color:#0f766e;">🧪 Experiment Lab</div><p>No laboratory activities or experiments are listed for this specific topic.</p></div>'
+        return '<div class="concept-tip-card" style="border-left-color:#0d9488;"><div class="concept-tip-title" style="color:#0f766e;">≡ƒº¬ Experiment Lab</div><p>No laboratory activities or experiments are listed for this specific topic.</p></div>'
         
-    html = '<div class="section"><h3>🧪 Experiment & Practical Activity Lab</h3><p style="color:#666;margin-bottom:1.5rem;">Study the key practical activities from your textbook. Focus on procedures, observations, and chemical equations.</p>'
+    html = '<div class="section"><h3>≡ƒº¬ Experiment & Practical Activity Lab</h3><p style="color:#666;margin-bottom:1.5rem;">Study the key practical activities from your textbook. Focus on procedures, observations, and chemical equations.</p>'
     for title, body in activities:
         body_html = format_science_content(body)
         html += f"""
         <div class="science-activity-card">
-            <div class="activity-title">🧪 {title.strip()}</div>
+            <div class="activity-title">≡ƒº¬ {title.strip()}</div>
             <div class="activity-section-content">{body_html}</div>
         </div>
         """
@@ -1435,8 +1613,8 @@ def format_science_solved_problem(p, idx):
         
     return f"""
     <div class="solved-problem-card" style="border-color:rgba(13,148,136,0.15);">
-        <div class="solved-problem-header" style="background:#fafdfd;" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open'); var sign = this.querySelector('.sign'); if (sign) sign.textContent = this.classList.contains('open') ? '−' : '+';">
-            <span>❓ Question {idx}: {htmlmod.escape(p.get('problem_text', '')[:300])}...</span>
+        <div class="solved-problem-header" style="background:#fafdfd;" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open'); var sign = this.querySelector('.sign'); if (sign) sign.textContent = this.classList.contains('open') ? 'ΓêÆ' : '+';">
+            <span>Γ¥ô Question {idx}: {htmlmod.escape(p.get('problem_text', '')[:300])}...</span>
             <span class="sign" style="font-size:1.2rem; color:#0d9488; font-weight:bold;">+</span>
         </div>
         <div class="solved-problem-body">
@@ -1449,8 +1627,8 @@ def format_science_solved_problem(p, idx):
                 {steps_html}
             </div>
             <div class="concept-tip-card" style="margin-top: 1rem; margin-bottom: 0; border-left-color:#0d9488;">
-                <div class="concept-tip-title" style="color:#0f766e;">🛡️ Exam Tip</div>
-                <p>Include physical states of reactants and products (like s, l, g, aq) and mention details like the catalyst or heating symbol (Δ) above the arrow to get full marks.</p>
+                <div class="concept-tip-title" style="color:#0f766e;">≡ƒ¢í∩╕Å Exam Tip</div>
+                <p>Include physical states of reactants and products (like s, l, g, aq) and mention details like the catalyst or heating symbol (╬ö) above the arrow to get full marks.</p>
             </div>
         </div>
     </div>
@@ -1466,7 +1644,7 @@ def format_social_content(text):
     # 1. Key Historical Terms formatting
     html = re.sub(
         r'(<p>)?<strong>(Satyagraha|Rowlatt Act|Khilafat|Boycott|Purna Swaraj|Harijan|Civil Disobedience|Hartal|Nation-state|Alluri Sitarama Raju|Baba Ramchandra)\b([^:]*):?</strong>(.*?)(</p>)?',
-        r'<div class="social-term-card"><div class="term-title">🏷️ <span class="term-badge">\2\3</span></div><div>\4</div></div>',
+        r'<div class="social-term-card"><div class="term-title">≡ƒÅ╖∩╕Å <span class="term-badge">\2\3</span></div><div>\4</div></div>',
         html,
         flags=re.DOTALL | re.IGNORECASE
     )
@@ -1474,7 +1652,7 @@ def format_social_content(text):
     # 2. Tips & Chronology alerts
     html = re.sub(
         r'(<p>)?<strong>(Key points to remember|Chronology|Map work|Board Exam Tip|Tip)\b([^:]*):?</strong>(.*?)(</p>)?',
-        r'<div class="concept-tip-card" style="border-left-color:#d97706;"><div class="concept-tip-title" style="color:#92400e;">💡 \2\3</div><div>\4</div></div>',
+        r'<div class="concept-tip-card" style="border-left-color:#d97706;"><div class="concept-tip-title" style="color:#92400e;">≡ƒÆí \2\3</div><div>\4</div></div>',
         html,
         flags=re.DOTALL | re.IGNORECASE
     )
@@ -1489,16 +1667,16 @@ def build_social_timeline(content, chunks):
         match = re.search(r'\b(1[789]\d{2}|20\d{2})\b', line)
         if match:
             year = match.group(1)
-            event_text = line.replace(year, "").strip("•-* :").strip()
+            event_text = line.replace(year, "").strip("ΓÇó-* :").strip()
             if event_text and len(event_text) > 10 and len(event_text) < 300:
                 events.append((int(year), event_text))
                 
     events = sorted(list(set(events)), key=lambda x: x[0])
     
     if not events:
-        return '<div class="concept-tip-card" style="border-left-color:#d97706;"><div class="concept-tip-title" style="color:#92400e;">📅 Chronology & Timeline</div><p>No historical milestones or chronological dates are listed for this specific topic.</p></div>'
+        return '<div class="concept-tip-card" style="border-left-color:#d97706;"><div class="concept-tip-title" style="color:#92400e;">≡ƒôà Chronology & Timeline</div><p>No historical milestones or chronological dates are listed for this specific topic.</p></div>'
         
-    html = '<div class="section"><h3>📅 Chronology & Historical Timeline</h3><p style="color:#666;margin-bottom:1.5rem;">Study the sequential milestone events for this topic. Chronology is crucial for matching and board exam essay questions.</p><div class="social-timeline-container">'
+    html = '<div class="section"><h3>≡ƒôà Chronology & Historical Timeline</h3><p style="color:#666;margin-bottom:1.5rem;">Study the sequential milestone events for this topic. Chronology is crucial for matching and board exam essay questions.</p><div class="social-timeline-container">'
     for year, text in events:
         words = text.split()
         title = " ".join(words[:5]) + "..." if len(words) > 5 else text
@@ -1541,8 +1719,8 @@ def format_social_solved_problem(p, idx):
         
     return f"""
     <div class="solved-problem-card" style="border-color:rgba(217,119,6,0.15);">
-        <div class="solved-problem-header" style="background:#fffdfa;" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open'); var sign = this.querySelector('.sign'); if (sign) sign.textContent = this.classList.contains('open') ? '−' : '+';">
-            <span>❓ Question {idx}: {htmlmod.escape(p.get('problem_text', '')[:300])}...</span>
+        <div class="solved-problem-header" style="background:#fffdfa;" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open'); var sign = this.querySelector('.sign'); if (sign) sign.textContent = this.classList.contains('open') ? 'ΓêÆ' : '+';">
+            <span>Γ¥ô Question {idx}: {htmlmod.escape(p.get('problem_text', '')[:300])}...</span>
             <span class="sign" style="font-size:1.2rem; color:#d97706; font-weight:bold;">+</span>
         </div>
         <div class="solved-problem-body">
@@ -1555,7 +1733,7 @@ def format_social_solved_problem(p, idx):
                 {steps_html}
             </div>
             <div class="concept-tip-card" style="margin-top: 1rem; margin-bottom: 0; border-left-color:#d97706;">
-                <div class="concept-tip-title" style="color:#92400e;">🛡️ Exam Tip</div>
+                <div class="concept-tip-title" style="color:#92400e;">≡ƒ¢í∩╕Å Exam Tip</div>
                 <p>Present social science answers in bulleted points rather than long paragraphs. Underline key keywords, historical names, and dates to capture the evaluator's attention.</p>
             </div>
         </div>
@@ -1572,7 +1750,7 @@ def format_general_content(text):
     # 1. Key Vocabulary / Terms
     html = re.sub(
         r'(<p>)?<strong>(Vocabulary|Meaning|Definition|Grammar Rule|Character)\b([^:]*):?</strong>(.*?)(</p>)?',
-        r'<div class="social-term-card" style="border-left-color:var(--accent);"><div class="term-title" style="color:var(--primary-light);">🏷️ <span class="term-badge" style="background:#e0f2fe; color:#0369a1;">\2\3</span></div><div>\4</div></div>',
+        r'<div class="social-term-card" style="border-left-color:var(--accent);"><div class="term-title" style="color:var(--primary-light);">≡ƒÅ╖∩╕Å <span class="term-badge" style="background:#e0f2fe; color:#0369a1;">\2\3</span></div><div>\4</div></div>',
         html,
         flags=re.DOTALL | re.IGNORECASE
     )
@@ -1580,7 +1758,7 @@ def format_general_content(text):
     # 2. General Board exam tips
     html = re.sub(
         r'(<p>)?<strong>(Key points|Summary|Board Exam Tip|Tip)\b([^:]*):?</strong>(.*?)(</p>)?',
-        r'<div class="concept-tip-card" style="border-left-color:var(--accent2);"><div class="concept-tip-title" style="color:var(--primary);">💡 \2\3</div><div>\4</div></div>',
+        r'<div class="concept-tip-card" style="border-left-color:var(--accent2);"><div class="concept-tip-title" style="color:var(--primary);">≡ƒÆí \2\3</div><div>\4</div></div>',
         html,
         flags=re.DOTALL | re.IGNORECASE
     )
@@ -1593,20 +1771,20 @@ def build_general_glossary(content, chunks):
     lines = all_text.split("\n")
     for line in lines:
         if ":" in line and "**" in line:
-            match = re.match(r'^\s*[-*•]?\s*\*\*(.*?)\*\*:\s*(.*)', line)
+            match = re.match(r'^\s*[-*ΓÇó]?\s*\*\*(.*?)\*\*:\s*(.*)', line)
             if match:
                 term, val = match.groups()
                 if len(term) < 50 and len(val) > 5 and len(val) < 200:
                     terms.append((term, val))
                     
     if not terms:
-        return '<div class="concept-tip-card" style="border-left-color:var(--accent2);"><div class="concept-tip-title">📚 Glossary & Terms</div><p>Refer to the Concept Explainer tab for core definitions and summaries.</p></div>'
+        return '<div class="concept-tip-card" style="border-left-color:var(--accent2);"><div class="concept-tip-title">≡ƒôÜ Glossary & Terms</div><p>Refer to the Concept Explainer tab for core definitions and summaries.</p></div>'
         
-    html = '<div class="section"><h3>📚 Glossary & Key Reference Words</h3><p style="color:#666;margin-bottom:1.5rem;">Study key glossary words and reference terms to master comprehension and writing skills.</p>'
+    html = '<div class="section"><h3>≡ƒôÜ Glossary & Key Reference Words</h3><p style="color:#666;margin-bottom:1.5rem;">Study key glossary words and reference terms to master comprehension and writing skills.</p>'
     for term, val in terms:
         html += f"""
         <div class="social-term-card" style="border-left-color:var(--accent);">
-            <div class="term-title">🏷️ <span class="term-badge" style="background:#e0f2fe; color:#0369a1;">{htmlmod.escape(term)}</span></div>
+            <div class="term-title">≡ƒÅ╖∩╕Å <span class="term-badge" style="background:#e0f2fe; color:#0369a1;">{htmlmod.escape(term)}</span></div>
             <p>{format_general_content(val)}</p>
         </div>
         """
@@ -1639,8 +1817,8 @@ def format_general_solved_problem(p, idx):
         
     return f"""
     <div class="solved-problem-card" style="border-color:var(--border);">
-        <div class="solved-problem-header" style="background:#fafafa;" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open'); var sign = this.querySelector('.sign'); if (sign) sign.textContent = this.classList.contains('open') ? '−' : '+';">
-            <span>❓ Question {idx}: {htmlmod.escape(p.get('problem_text', '')[:300])}...</span>
+        <div class="solved-problem-header" style="background:#fafafa;" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open'); var sign = this.querySelector('.sign'); if (sign) sign.textContent = this.classList.contains('open') ? 'ΓêÆ' : '+';">
+            <span>Γ¥ô Question {idx}: {htmlmod.escape(p.get('problem_text', '')[:300])}...</span>
             <span class="sign" style="font-size:1.2rem; color:var(--accent); font-weight:bold;">+</span>
         </div>
         <div class="solved-problem-body">
@@ -1653,7 +1831,7 @@ def format_general_solved_problem(p, idx):
                 {steps_html}
             </div>
             <div class="concept-tip-card" style="margin-top: 1rem; margin-bottom: 0; border-left-color:var(--accent);">
-                <div class="concept-tip-title" style="color:var(--primary-light);">🛡️ Exam Tip</div>
+                <div class="concept-tip-title" style="color:var(--primary-light);">≡ƒ¢í∩╕Å Exam Tip</div>
                 <p>Provide contextual explanations, structured points, and reference correct spelling and terms to secure high marks in exams.</p>
             </div>
         </div>
@@ -1711,15 +1889,15 @@ async def topic_page(topic_id: str):
 <div class="section">
 <h2>{htmlmod.escape(topic['title'])}</h2>
 <div class="chapter-actions" style="margin-bottom:1.5rem;">
-<a href="/tutor/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🧠 AI Tutor</a>
-<a href="/mindmap/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🗺️ Mind Map</a>
-<a href="/interactives/cards/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🃏 Flashcards</a>
+<a href="/tutor/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒºá AI Tutor</a>
+<a href="/mindmap/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒù║∩╕Å Mind Map</a>
+<a href="/interactives/cards/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒâÅ Flashcards</a>
 </div>
 
 <div class="math-tabs">
-  <button class="math-tab-btn active" onclick="switchMathTab('concept')">📖 Concept Explainer</button>
-  <button class="math-tab-btn" onclick="switchMathTab('formulas')">⚡ Formulas & Theorems</button>
-  <button class="math-tab-btn" onclick="switchMathTab('problems')">📝 Solved Exercises</button>
+  <button class="math-tab-btn active" onclick="switchMathTab('concept')">≡ƒôû Concept Explainer</button>
+  <button class="math-tab-btn" onclick="switchMathTab('formulas')">ΓÜí Formulas & Theorems</button>
+  <button class="math-tab-btn" onclick="switchMathTab('problems')">≡ƒô¥ Solved Exercises</button>
 </div>
 
 <div id="math-tab-concept" class="math-tab-content active">
@@ -1733,7 +1911,7 @@ async def topic_page(topic_id: str):
 
 <div id="math-tab-problems" class="math-tab-content">
   <div class="section">
-    <h3>📝 NCERT Solved Practice Exercises</h3>
+    <h3>≡ƒô¥ NCERT Solved Practice Exercises</h3>
     <p style="color:#666;margin-bottom:1.5rem;">Study step-by-step solved solutions. Tap any question to toggle the active-recall solution view.</p>
     {solved_html}
   </div>
@@ -1765,15 +1943,15 @@ async def topic_page(topic_id: str):
 <div class="section">
 <h2>{htmlmod.escape(topic['title'])}</h2>
 <div class="chapter-actions" style="margin-bottom:1.5rem;">
-<a href="/tutor/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🧠 AI Tutor</a>
-<a href="/mindmap/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🗺️ Mind Map</a>
-<a href="/interactives/cards/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🃏 Flashcards</a>
+<a href="/tutor/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒºá AI Tutor</a>
+<a href="/mindmap/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒù║∩╕Å Mind Map</a>
+<a href="/interactives/cards/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒâÅ Flashcards</a>
 </div>
 
 <div class="math-tabs">
-  <button class="math-tab-btn active" onclick="switchMathTab('concept')">📖 Concept Explainer</button>
-  <button class="math-tab-btn" onclick="switchMathTab('formulas')">🧪 Experiment Lab</button>
-  <button class="math-tab-btn" onclick="switchMathTab('problems')">📝 Solved Exercises</button>
+  <button class="math-tab-btn active" onclick="switchMathTab('concept')">≡ƒôû Concept Explainer</button>
+  <button class="math-tab-btn" onclick="switchMathTab('formulas')">≡ƒº¬ Experiment Lab</button>
+  <button class="math-tab-btn" onclick="switchMathTab('problems')">≡ƒô¥ Solved Exercises</button>
 </div>
 
 <div id="math-tab-concept" class="math-tab-content active">
@@ -1787,7 +1965,7 @@ async def topic_page(topic_id: str):
 
 <div id="math-tab-problems" class="math-tab-content">
   <div class="section">
-    <h3>📝 NCERT Solved Practice Exercises</h3>
+    <h3>≡ƒô¥ NCERT Solved Practice Exercises</h3>
     <p style="color:#666;margin-bottom:1.5rem;">Study step-by-step solved solutions. Tap any question to toggle the active-recall solution view.</p>
     {solved_html}
   </div>
@@ -1819,15 +1997,15 @@ async def topic_page(topic_id: str):
 <div class="section">
 <h2>{htmlmod.escape(topic['title'])}</h2>
 <div class="chapter-actions" style="margin-bottom:1.5rem;">
-<a href="/tutor/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🧠 AI Tutor</a>
-<a href="/mindmap/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🗺️ Mind Map</a>
-<a href="/interactives/cards/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🃏 Flashcards</a>
+<a href="/tutor/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒºá AI Tutor</a>
+<a href="/mindmap/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒù║∩╕Å Mind Map</a>
+<a href="/interactives/cards/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒâÅ Flashcards</a>
 </div>
 
 <div class="math-tabs">
-  <button class="math-tab-btn active" onclick="switchMathTab('concept')">📖 Concept Explainer</button>
-  <button class="math-tab-btn" onclick="switchMathTab('formulas')">📅 Timeline & Events</button>
-  <button class="math-tab-btn" onclick="switchMathTab('problems')">📝 Solved Exercises</button>
+  <button class="math-tab-btn active" onclick="switchMathTab('concept')">≡ƒôû Concept Explainer</button>
+  <button class="math-tab-btn" onclick="switchMathTab('formulas')">≡ƒôà Timeline & Events</button>
+  <button class="math-tab-btn" onclick="switchMathTab('problems')">≡ƒô¥ Solved Exercises</button>
 </div>
 
 <div id="math-tab-concept" class="math-tab-content active">
@@ -1841,7 +2019,7 @@ async def topic_page(topic_id: str):
 
 <div id="math-tab-problems" class="math-tab-content">
   <div class="section">
-    <h3>📝 NCERT Solved Practice Exercises</h3>
+    <h3>≡ƒô¥ NCERT Solved Practice Exercises</h3>
     <p style="color:#666;margin-bottom:1.5rem;">Study step-by-step solved solutions. Tap any question to toggle the active-recall solution view.</p>
     {solved_html}
   </div>
@@ -1874,15 +2052,15 @@ async def topic_page(topic_id: str):
 <div class="section">
 <h2>{htmlmod.escape(topic['title'])}</h2>
 <div class="chapter-actions" style="margin-bottom:1.5rem;">
-<a href="/tutor/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🧠 AI Tutor</a>
-<a href="/mindmap/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🗺️ Mind Map</a>
-<a href="/interactives/cards/{topic_id}" class="tts-btn" style="font-size:0.8rem;">🃏 Flashcards</a>
+<a href="/tutor/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒºá AI Tutor</a>
+<a href="/mindmap/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒù║∩╕Å Mind Map</a>
+<a href="/interactives/cards/{topic_id}" class="tts-btn" style="font-size:0.8rem;">≡ƒâÅ Flashcards</a>
 </div>
 
 <div class="math-tabs">
-  <button class="math-tab-btn active" onclick="switchMathTab('concept')">📖 Concept Explainer</button>
-  <button class="math-tab-btn" onclick="switchMathTab('formulas')">📚 Vocabulary & Reference</button>
-  <button class="math-tab-btn" onclick="switchMathTab('problems')">📝 Solved Exercises</button>
+  <button class="math-tab-btn active" onclick="switchMathTab('concept')">≡ƒôû Concept Explainer</button>
+  <button class="math-tab-btn" onclick="switchMathTab('formulas')">≡ƒôÜ Vocabulary & Reference</button>
+  <button class="math-tab-btn" onclick="switchMathTab('problems')">≡ƒô¥ Solved Exercises</button>
 </div>
 
 <div id="math-tab-concept" class="math-tab-content active">
@@ -1896,7 +2074,7 @@ async def topic_page(topic_id: str):
 
 <div id="math-tab-problems" class="math-tab-content">
   <div class="section">
-    <h3>📝 NCERT Solved Practice Exercises</h3>
+    <h3>≡ƒô¥ NCERT Solved Practice Exercises</h3>
     <p style="color:#666;margin-bottom:1.5rem;">Study step-by-step solved solutions. Tap any question to toggle the active-recall solution view.</p>
     {solved_html}
   </div>
@@ -1909,9 +2087,9 @@ async def topic_page(topic_id: str):
 
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# API ROUTES — ASYNC
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+# API ROUTES ΓÇö ASYNC
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
 @app.post("/api/tutor/start")
 @rate_limit(30)
@@ -1981,7 +2159,7 @@ async def api_tutor_remedial(request: Request, user: Optional[dict] = Depends(ge
         answer["question_type"],
         answer["question"]
     )
-    html = f'<div class="tutor-remedial"><h4>📚 Let\'s Review This</h4><div class="tutor-remedial-content">{format_content(remedial)}</div></div>'
+    html = f'<div class="tutor-remedial"><h4>≡ƒôÜ Let\'s Review This</h4><div class="tutor-remedial-content">{format_content(remedial)}</div></div>'
     return {"status": "ok", "remedial_html": html}
 
 
@@ -2009,9 +2187,9 @@ async def api_ai_enrich(request: Request, topic: str = Query(...), chapter: str 
     return {"html": html, "cached": bool(enriched.get("explanation"))}
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 # AI TOOL API HANDLERS
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
 
 async def _run_in_thread(func, *args):
@@ -2155,18 +2333,18 @@ async def api_ai_voiceover(request: Request, text: str = Query(...), voice: str 
     return result
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 # AI TOOL PAGES
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
 @app.get("/ai/diagram", response_class=HTMLResponse)
 async def ai_diagram():
     return _render(
-        title="AI Diagram Generator — AI Study Companion",
+        title="AI Diagram Generator ΓÇö AI Study Companion",
         content="""
-        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Diagram Generator</div>
+        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Diagram Generator</div>
         <div class="section">
-            <h2>📐 AI Diagram & Mind Map Generator</h2>
+            <h2>≡ƒôÉ AI Diagram & Mind Map Generator</h2>
             <p class="subtitle">Generate interactive flowcharts, mind maps, and concept diagrams grounded in local NCERT textbook contexts</p>
             <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
                 <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Concept</label>
@@ -2213,16 +2391,16 @@ async def ai_diagram():
                     contentHtml += '</div>';
                     
                     if (data.explanation) {
-                        let headerTitle = "📖 Study Guide & Exam Prep";
+                        let headerTitle = "≡ƒôû Study Guide & Exam Prep";
                         let introText = "";
                         if (type === 'mindmap') {
-                            headerTitle = "🗺️ Dot-Connection & Association Guide";
+                            headerTitle = "≡ƒù║∩╕Å Dot-Connection & Association Guide";
                             introText = '<div style="margin-bottom:1rem; padding:1rem; border-radius:8px; background:#e0f2fe; border-left:4px solid #0284c7; font-size:0.95rem; color:#0369a1;"><strong>Mind Map focus: Connecting concepts & filling gaps.</strong> Mapping associative properties radially outward back to the core concept.</div>';
                         } else if (type === 'flowchart') {
-                            headerTitle = "📐 Sequential Process & Outcomes Guide";
+                            headerTitle = "≡ƒôÉ Sequential Process & Outcomes Guide";
                             introText = '<div style="margin-bottom:1rem; padding:1rem; border-radius:8px; background:#fef3c7; border-left:4px solid #d97706; font-size:0.95rem; color:#b45309;"><strong>Flowchart focus: Step outcomes.</strong> Follow the step outcomes in the flowchart to understand the product at each milestone.</div>';
                         } else if (type === 'concept-map') {
-                            headerTitle = "🔗 Detailed Concept Relation Guide";
+                            headerTitle = "≡ƒöù Detailed Concept Relation Guide";
                             introText = '<div style="margin-bottom:1rem; padding:1rem; border-radius:8px; background:#dcfce7; border-left:4px solid #16a34a; font-size:0.95rem; color:#15803d;"><strong>Relation Map focus: High fidelity structural connections.</strong> Maps complex cross-links and semantic verbs. See the dynamic simulator player added below the diagram.</div>';
                         }
                         
@@ -2267,11 +2445,11 @@ async def ai_diagram():
 @app.get("/ai/presentation", response_class=HTMLResponse)
 async def ai_presentation():
     return _render(
-        title="AI Presentation Generator — AI Study Companion",
+        title="AI Presentation Generator ΓÇö AI Study Companion",
         content="""
-        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Presentation</div>
+        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Presentation</div>
         <div class="section">
-            <h2>📽️ AI Presentation Generator</h2>
+            <h2>≡ƒô╜∩╕Å AI Presentation Generator</h2>
             <p class="subtitle">Create HTML slide presentations for any topic using Mistral AI</p>
             <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
                 <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Subject</label>
@@ -2303,11 +2481,11 @@ async def ai_presentation():
 @app.get("/ai/voiceover", response_class=HTMLResponse)
 async def ai_voiceover():
     return _render(
-        title="AI Voiceover — AI Study Companion",
+        title="AI Voiceover ΓÇö AI Study Companion",
         content="""
-        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Voiceover</div>
+        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Voiceover</div>
         <div class="section">
-            <h2>🎤 AI Voiceover Studio</h2>
+            <h2>≡ƒÄñ AI Voiceover Studio</h2>
             <p class="subtitle">Text-to-speech with Indian language support & voice-video sync</p>
             <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
                 <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Script / Text to speak</label>
@@ -2317,15 +2495,15 @@ async def ai_voiceover():
                         <label style="font-weight:500;display:block;font-size:0.85rem;margin-bottom:0.3rem;">Language</label>
                         <select id="vo-lang" style="width:100%;padding:0.5rem;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
                             <option value="en-IN">English (India)</option>
-                            <option value="hi-IN">हिन्दी (Hindi)</option>
-                            <option value="te-IN">తెలుగు (Telugu)</option>
+                            <option value="hi-IN">αñ╣αñ┐αñ¿αÑìαñªαÑÇ (Hindi)</option>
+                            <option value="te-IN">α░ñα▒åα░▓α▒üα░ùα▒ü (Telugu)</option>
                         </select>
                     </div>
                     <div style="flex:1;min-width:140px;">
                         <label style="font-weight:500;display:block;font-size:0.85rem;margin-bottom:0.3rem;">Voice</label>
                         <select id="vo-voice" style="width:100%;padding:0.5rem;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
-                            <option value="female">👩 Female</option>
-                            <option value="male">👨 Male</option>
+                            <option value="female">≡ƒæ⌐ Female</option>
+                            <option value="male">≡ƒæ¿ Male</option>
                         </select>
                     </div>
                     <div style="flex:1;min-width:140px;">
@@ -2335,9 +2513,9 @@ async def ai_voiceover():
                     </div>
                 </div>
                 <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-                    <button onclick="speakText()" class="btn-primary" style="padding:0.7rem 1.5rem;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;cursor:pointer;">🔊 Speak</button>
-                    <button onclick="stopSpeech()" style="padding:0.7rem 1.5rem;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;cursor:pointer;">⏹ Stop</button>
-                    <button onclick="syncWithVideo()" style="padding:0.7rem 1.5rem;background:#e8f4f8;color:#4a90d9;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;cursor:pointer;">🎬 Sync with Video</button>
+                    <button onclick="speakText()" class="btn-primary" style="padding:0.7rem 1.5rem;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;cursor:pointer;">≡ƒöè Speak</button>
+                    <button onclick="stopSpeech()" style="padding:0.7rem 1.5rem;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;cursor:pointer;">ΓÅ╣ Stop</button>
+                    <button onclick="syncWithVideo()" style="padding:0.7rem 1.5rem;background:#e8f4f8;color:#4a90d9;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;cursor:pointer;">≡ƒÄ¼ Sync with Video</button>
                 </div>
                 <div id="vo-waveform" style="margin-top:1rem;height:60px;background:#f8f9fa;border-radius:8px;border:1px solid var(--border);overflow:hidden;position:relative;">
                     <canvas id="vo-canvas" style="width:100%;height:60px;"></canvas>
@@ -2361,12 +2539,12 @@ async def ai_voiceover():
             utter.lang = lang;
             utter.rate = rate;
             utter.pitch = voice === 'female' ? 1.2 : 0.85;
-            utter.onstart = function() { document.getElementById('vo-status').textContent = '🔊 Speaking... (' + voice + ')'; startWaveform(); };
-            utter.onend = function() { document.getElementById('vo-status').textContent = '✅ Done'; stopWaveform(); };
-            utter.onerror = function() { document.getElementById('vo-status').textContent = '❌ Error'; stopWaveform(); };
+            utter.onstart = function() { document.getElementById('vo-status').textContent = '≡ƒöè Speaking... (' + voice + ')'; startWaveform(); };
+            utter.onend = function() { document.getElementById('vo-status').textContent = 'Γ£à Done'; stopWaveform(); };
+            utter.onerror = function() { document.getElementById('vo-status').textContent = 'Γ¥î Error'; stopWaveform(); };
             window.speechSynthesis.speak(utter);
         }
-        function stopSpeech() { window.speechSynthesis.cancel(); stopWaveform(); document.getElementById('vo-status').textContent = '⏹ Stopped'; }
+        function stopSpeech() { window.speechSynthesis.cancel(); stopWaveform(); document.getElementById('vo-status').textContent = 'ΓÅ╣ Stopped'; }
         function startWaveform() {
             var canvas = document.getElementById('vo-canvas');
             var ctx = canvas.getContext('2d');
@@ -2396,19 +2574,19 @@ async def ai_voiceover():
             var text = document.getElementById('vo-text').value;
             var voice = document.getElementById('vo-voice').value;
             var lang = document.getElementById('vo-lang').value;
-            document.getElementById('vo-status').textContent = '🔄 Generating voiceover segments for video sync...';
+            document.getElementById('vo-status').textContent = '≡ƒöä Generating voiceover segments for video sync...';
             fetch('/api/ai/voiceover?text='+encodeURIComponent(text)+'&voice='+voice+'&lang='+lang)
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
                     if (data.tts === 'browser') {
-                        document.getElementById('vo-status').textContent = '✅ Ready for video sync. Click "Speak" to play voiceover with video.';
+                        document.getElementById('vo-status').textContent = 'Γ£à Ready for video sync. Click "Speak" to play voiceover with video.';
                         // Auto-start with a short delay for demo
                         setTimeout(function() { speakText(); }, 500);
                     } else {
-                        document.getElementById('vo-status').textContent = '✅ Voiceover synced';
+                        document.getElementById('vo-status').textContent = 'Γ£à Voiceover synced';
                     }
                 })
-                .catch(function(e) { document.getElementById('vo-status').textContent = '❌ Sync error: ' + e.message; });
+                .catch(function(e) { document.getElementById('vo-status').textContent = 'Γ¥î Sync error: ' + e.message; });
         }
         window.addEventListener('resize', function() {
             var canvas = document.getElementById('vo-canvas');
@@ -2421,18 +2599,18 @@ async def ai_voiceover():
 @app.get("/ai/music", response_class=HTMLResponse)
 async def ai_music():
     return _render(
-        title="AI Music — AI Study Companion",
+        title="AI Music ΓÇö AI Study Companion",
         content="""
-        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Music</div>
+        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Music</div>
         <div class="section">
-            <h2>🎵 AI Music Generator</h2>
+            <h2>≡ƒÄ╡ AI Music Generator</h2>
             <p class="subtitle">Generate study music with configurable mood parameters using Mistral AI</p>
             <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
                 <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Mood</label>
                 <select id="music-mood" style="width:100%;padding:0.7rem;border:1px solid var(--border);border-radius:8px;margin-bottom:1rem;">
-                    <option value="calm study piano">Calm — Study Piano</option>
-                    <option value="focus ambient">Focus — Ambient</option>
-                    <option value="energetic learning">Energetic — Learning</option>
+                    <option value="calm study piano">Calm ΓÇö Study Piano</option>
+                    <option value="focus ambient">Focus ΓÇö Ambient</option>
+                    <option value="energetic learning">Energetic ΓÇö Learning</option>
                 </select>
                 <button onclick="generateMusic()" class="btn-primary" style="padding:0.8rem 2rem;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;">Generate</button>
                 <div id="music-output" style="margin-top:1rem;padding:1rem;border:1px solid var(--border);border-radius:8px;min-height:60px;"></div>
@@ -2458,12 +2636,12 @@ async def ai_music():
 @app.get("/ai/story", response_class=HTMLResponse)
 async def ai_story():
     return _render(
-        title="AI Story Generator — AI Study Companion",
+        title="AI Story Generator ΓÇö AI Study Companion",
         content="""
-        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Story</div>
+        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Story</div>
         <div class="section">
-            <h2>📖 AI Story Generator</h2>
-            <p class="subtitle">Generate educational stories that make learning fun — powered by Mistral AI</p>
+            <h2>≡ƒôû AI Story Generator</h2>
+            <p class="subtitle">Generate educational stories that make learning fun ΓÇö powered by Mistral AI</p>
             <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
                 <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Topic</label>
                 <input type="text" id="story-topic" value="Photosynthesis" style="width:100%;padding:0.7rem;border:1px solid var(--border);border-radius:8px;margin-bottom:1rem;">
@@ -2494,12 +2672,12 @@ async def ai_story():
 @app.get("/ai/pomelli", response_class=HTMLResponse)
 async def ai_pomelli():
     return _render(
-        title="Pomelli Interactive Math — AI Study Companion",
+        title="Pomelli Interactive Math ΓÇö AI Study Companion",
         content="""
-        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Pomelli Math</div>
+        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Pomelli Math</div>
         <div class="section">
-            <h2>📐 Pomelli Interactive Math</h2>
-            <p class="subtitle">Interactive math visualizations — graphs, geometry, fractions, and more</p>
+            <h2>≡ƒôÉ Pomelli Interactive Math</h2>
+            <p class="subtitle">Interactive math visualizations ΓÇö graphs, geometry, fractions, and more</p>
             <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
                 <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Template</label>
                 <select id="pomelli-template" style="width:100%;padding:0.7rem;border:1px solid var(--border);border-radius:8px;margin-bottom:1rem;">
@@ -2538,12 +2716,12 @@ async def ai_pomelli():
 @app.get("/ai/metai", response_class=HTMLResponse)
 async def ai_metai():
     return _render(
-        title="MetaAI Learning — AI Study Companion",
+        title="MetaAI Learning ΓÇö AI Study Companion",
         content="""
-        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> MetaAI</div>
+        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> MetaAI</div>
         <div class="section">
-            <h2>🤖 MetaAI Learning</h2>
-            <p class="subtitle">Contextual learning powered by MetaAI — explanations, storyboards, and learning guides</p>
+            <h2>≡ƒñû MetaAI Learning</h2>
+            <p class="subtitle">Contextual learning powered by MetaAI ΓÇö explanations, storyboards, and learning guides</p>
             <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
                 <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Concept</label>
                 <input type="text" id="metai-concept" value="Photosynthesis" style="width:100%;padding:0.7rem;border:1px solid var(--border);border-radius:8px;margin-bottom:1rem;">
@@ -2579,11 +2757,11 @@ async def ai_metai():
 @app.get("/ai/opengrok", response_class=HTMLResponse)
 async def ai_opengrok():
     return _render(
-        title="OpenGrok Search — AI Study Companion",
+        title="OpenGrok Search ΓÇö AI Study Companion",
         content="""
-        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> OpenGrok</div>
+        <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> OpenGrok</div>
         <div class="section">
-            <h2>🔍 OpenGrok Formula & Theorem Search</h2>
+            <h2>≡ƒöì OpenGrok Formula & Theorem Search</h2>
             <p class="subtitle">Search formulas, theorems, and code across the CBSE curriculum</p>
             <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
                 <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Search Query</label>
@@ -2609,24 +2787,24 @@ async def ai_opengrok():
     )
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 # MISSING BRIDGE PAGES (replacing legacy catch-all)
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
 
 @app.get("/about", response_class=HTMLResponse)
 async def about_page():
-    return HTMLResponse(_render(title="About — AI Study Companion", content="""
+    return HTMLResponse(_render(title="About ΓÇö AI Study Companion", content="""
     <div class="section">
-        <h2>📖 About AI Study Companion</h2>
-        <p style="color:#666;margin-bottom:1rem;">AI-powered learning platform for CBSE, AP Board, and TS Board Class V–X students.</p>
+        <h2>≡ƒôû About AI Study Companion</h2>
+        <p style="color:#666;margin-bottom:1rem;">AI-powered learning platform for CBSE, AP Board, and TS Board Class VΓÇôX students.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;">
-            <div class="book-section"><h3>📚 Multi-Board Support</h3><p>CBSE · AP Board · Telangana Board — complete syllabus coverage.</p></div>
-            <div class="book-section"><h3>🤖 AI-Powered Tools</h3><p>Mistral AI & Gemini: diagram generation, presentations, voiceovers, research, and more.</p></div>
-            <div class="book-section"><h3>🎯 Interactive Learning</h3><p>Quizzes, mind maps, interactive cards, matching games for every topic.</p></div>
-            <div class="book-section"><h3>🏆 Gamification</h3><p>XP, levels, streaks, and achievements to keep you motivated.</p></div>
-            <div class="book-section"><h3>🌐 Multi-Lingual</h3><p>English · हिन्दी · తెలుగు · தமிழ் · ಕನ್ನಡ · বাংলা · മലയാളം — learn in your preferred medium.</p></div>
-            <div class="book-section"><h3>📊 Progress Tracking</h3><p>Personalized learning paths, revision notes, and mock exams.</p></div>
+            <div class="book-section"><h3>≡ƒôÜ Multi-Board Support</h3><p>CBSE ┬╖ AP Board ┬╖ Telangana Board ΓÇö complete syllabus coverage.</p></div>
+            <div class="book-section"><h3>≡ƒñû AI-Powered Tools</h3><p>Mistral AI & Gemini: diagram generation, presentations, voiceovers, research, and more.</p></div>
+            <div class="book-section"><h3>≡ƒÄ» Interactive Learning</h3><p>Quizzes, mind maps, interactive cards, matching games for every topic.</p></div>
+            <div class="book-section"><h3>≡ƒÅå Gamification</h3><p>XP, levels, streaks, and achievements to keep you motivated.</p></div>
+            <div class="book-section"><h3>≡ƒîÉ Multi-Lingual</h3><p>English ┬╖ αñ╣αñ┐αñ¿αÑìαñªαÑÇ ┬╖ α░ñα▒åα░▓α▒üα░ùα▒ü ┬╖ α«ñα««α«┐α«┤α»ì ┬╖ α▓òα▓¿α│ìα▓¿α▓í ┬╖ αª¼αª╛αªéαª▓αª╛ ┬╖ α┤«α┤▓α┤»α┤╛α┤│α┤é ΓÇö learn in your preferred medium.</p></div>
+            <div class="book-section"><h3>≡ƒôè Progress Tracking</h3><p>Personalized learning paths, revision notes, and mock exams.</p></div>
         </div>
     </div>"""))
 
@@ -2644,50 +2822,50 @@ async def exams_page():
                 rows += f'<div class="book-section"><h3><a href="/board/{s["board_id"]}/{s["id"]}">{s["name"]}</a></h3><ul>{ch_links}</ul><p style="margin-top:0.3rem;"><a href="/quiz/{s["id"]}" class="tts-btn" style="font-size:0.78rem;">Take Mock Exam</a></p></div>'
     if not rows:
         rows = '<p style="text-align:center;padding:2rem;color:#666;">No exams available yet.</p>'
-    return HTMLResponse(_render(title="Mock Exams — AI Study Companion", content=f"""
+    return HTMLResponse(_render(title="Mock Exams ΓÇö AI Study Companion", content=f"""
     <div class="breadcrumb">{_build_breadcrumb([("Home", "/"), ("Mock Exams", None)])}</div>
-    <div class="section"><h2>🏆 Mock Exams</h2><p style="color:#666;margin-bottom:1rem;">Practice with chapter-wise mock exams. Track your progress and improve.</p>{rows}</div>"""))
+    <div class="section"><h2>≡ƒÅå Mock Exams</h2><p style="color:#666;margin-bottom:1rem;">Practice with chapter-wise mock exams. Track your progress and improve.</p>{rows}</div>"""))
 
 
 @app.get("/ai", response_class=HTMLResponse)
 async def ai_studio_hub():
-    return HTMLResponse(_render(title="AI Studio — AI Study Companion", content="""
-    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> AI Studio</div>
-    <div class="section"><h2>🤖 AI Studio</h2>
+    return HTMLResponse(_render(title="AI Studio ΓÇö AI Study Companion", content="""
+    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> AI Studio</div>
+    <div class="section"><h2>≡ƒñû AI Studio</h2>
     <p style="color:#666;margin-bottom:1rem;">AI-powered learning tools powered by Mistral AI & Gemini.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.8rem;">
-        <a href="/ai/diagram" class="book-section" style="text-decoration:none;display:block;"><h3>📐 Diagram Generator</h3><p style="font-size:0.85rem;color:#666;">Flowcharts, mind maps, concept maps</p></a>
-        <a href="/ai/presentation" class="book-section" style="text-decoration:none;display:block;"><h3>📽️ Presentations</h3><p style="font-size:0.85rem;color:#666;">HTML slide decks for any topic</p></a>
-        <a href="/ai/story" class="book-section" style="text-decoration:none;display:block;"><h3>📖 Story Generator</h3><p style="font-size:0.85rem;color:#666;">Educational stories & analogies</p></a>
-        <a href="/ai/voiceover" class="book-section" style="text-decoration:none;display:block;"><h3>🎤 Voiceover</h3><p style="font-size:0.85rem;color:#666;">Text-to-speech in Indian languages</p></a>
-        <a href="/ai/music" class="book-section" style="text-decoration:none;display:block;"><h3>🎵 Study Music</h3><p style="font-size:0.85rem;color:#666;">Ambient focus & study music</p></a>
-        <a href="/ai/research" class="book-section" style="text-decoration:none;display:block;"><h3>🔬 Research Assistant</h3><p style="font-size:0.85rem;color:#666;">Deep topic research & analysis</p></a>
-        <a href="/ai/literature" class="book-section" style="text-decoration:none;display:block;"><h3>📚 Literature Review</h3><p style="font-size:0.85rem;color:#666;">Research paper summaries</p></a>
-        <a href="/ai/visualize" class="book-section" style="text-decoration:none;display:block;"><h3>👁️ SVG Visualizer</h3><p style="font-size:0.85rem;color:#666;">Concept → SVG diagrams</p></a>
-        <a href="/ai/pomelli" class="book-section" style="text-decoration:none;display:block;"><h3>📐 Pomelli Math</h3><p style="font-size:0.85rem;color:#666;">Interactive math visualizations</p></a>
-        <a href="/ai/metai" class="book-section" style="text-decoration:none;display:block;"><h3>🤖 MetaAI Learning</h3><p style="font-size:0.85rem;color:#666;">Storyboards & learning guides</p></a>
-        <a href="/ai/metai" class="book-section" style="text-decoration:none;display:block;"><h3>🤖 MetaAI Learning</h3><p style="font-size:0.85rem;color:#666;">Storyboards & learning guides</p></a>
-        <a href="/ai/youtube" class="book-section" style="text-decoration:none;display:block;"><h3>🎬 Concept Storyboards</h3><p style="font-size:0.85rem;color:#666;">Offline animated visual lessons</p></a>
-        <a href="/ai/opengrok" class="book-section" style="text-decoration:none;display:block;"><h3>📐 Formulas & Theorems</h3><p style="font-size:0.85rem;color:#666;">Math & science formula search</p></a>
+        <a href="/ai/diagram" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒôÉ Diagram Generator</h3><p style="font-size:0.85rem;color:#666;">Flowcharts, mind maps, concept maps</p></a>
+        <a href="/ai/presentation" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒô╜∩╕Å Presentations</h3><p style="font-size:0.85rem;color:#666;">HTML slide decks for any topic</p></a>
+        <a href="/ai/story" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒôû Story Generator</h3><p style="font-size:0.85rem;color:#666;">Educational stories & analogies</p></a>
+        <a href="/ai/voiceover" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒÄñ Voiceover</h3><p style="font-size:0.85rem;color:#666;">Text-to-speech in Indian languages</p></a>
+        <a href="/ai/music" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒÄ╡ Study Music</h3><p style="font-size:0.85rem;color:#666;">Ambient focus & study music</p></a>
+        <a href="/ai/research" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒö¼ Research Assistant</h3><p style="font-size:0.85rem;color:#666;">Deep topic research & analysis</p></a>
+        <a href="/ai/literature" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒôÜ Literature Review</h3><p style="font-size:0.85rem;color:#666;">Research paper summaries</p></a>
+        <a href="/ai/visualize" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒæü∩╕Å SVG Visualizer</h3><p style="font-size:0.85rem;color:#666;">Concept ΓåÆ SVG diagrams</p></a>
+        <a href="/ai/pomelli" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒôÉ Pomelli Math</h3><p style="font-size:0.85rem;color:#666;">Interactive math visualizations</p></a>
+        <a href="/ai/metai" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒñû MetaAI Learning</h3><p style="font-size:0.85rem;color:#666;">Storyboards & learning guides</p></a>
+        <a href="/ai/metai" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒñû MetaAI Learning</h3><p style="font-size:0.85rem;color:#666;">Storyboards & learning guides</p></a>
+        <a href="/ai/youtube" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒÄ¼ Concept Storyboards</h3><p style="font-size:0.85rem;color:#666;">Offline animated visual lessons</p></a>
+        <a href="/ai/opengrok" class="book-section" style="text-decoration:none;display:block;"><h3>≡ƒôÉ Formulas & Theorems</h3><p style="font-size:0.85rem;color:#666;">Math & science formula search</p></a>
     </div></div>"""))
 
 
 @app.get("/ai/youtube", response_class=HTMLResponse)
 async def ai_youtube_page():
-    return HTMLResponse(_render(title="AI Concept Storyboard Studio — AI Study Companion", content="""
-    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Concept Storyboards</div>
+    return HTMLResponse(_render(title="AI Concept Storyboard Studio ΓÇö AI Study Companion", content="""
+    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Concept Storyboards</div>
     <div class="section">
-        <h2>🎬 AI Concept Storyboard Studio</h2>
+        <h2>≡ƒÄ¼ AI Concept Storyboard Studio</h2>
         <p class="subtitle">Search and generate offline-first concept storyboards grounded in local textbook databases</p>
         <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
             <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Concept Topic</label>
             <input type="text" id="yt-topic" value="Photosynthesis" style="width:100%;padding:0.7rem;border:1px solid var(--border);border-radius:8px;margin-bottom:1rem;">
-            <button onclick="searchYouTube()" class="btn-primary" style="padding:0.8rem 2rem;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;">🎬 Generate Storyboards</button>
+            <button onclick="searchYouTube()" class="btn-primary" style="padding:0.8rem 2rem;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;">≡ƒÄ¼ Generate Storyboards</button>
             <div id="yt-output" style="margin-top:1rem;"></div>
         </div>
     </div>
     <div class="section">
-        <h2>🎞️ Iterative Short-Clip Visual Script Generator</h2>
+        <h2>≡ƒÄ₧∩╕Å Iterative Short-Clip Visual Script Generator</h2>
         <p class="subtitle">Convert a long topic into sequential short scenes with narration and layout scripts</p>
         <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
             <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Topic Name</label>
@@ -2695,7 +2873,7 @@ async def ai_youtube_page():
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
                 <input type="text" id="yt-clip-chapter" placeholder="Chapter ID (optional)" style="flex:1;min-width:120px;padding:0.7rem;border:1px solid var(--border);border-radius:8px;">
                 <input type="number" id="yt-clip-count" value="5" min="2" max="20" style="width:80px;padding:0.7rem;border:1px solid var(--border);border-radius:8px;">
-                <button onclick="generateClips()" class="btn-primary" style="padding:0.8rem 2rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;">🎬 Generate Scene Playlist</button>
+                <button onclick="generateClips()" class="btn-primary" style="padding:0.8rem 2rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;">≡ƒÄ¼ Generate Scene Playlist</button>
             </div>
             <div id="yt-clip-output" style="margin-top:1rem;"></div>
         </div>
@@ -2725,7 +2903,7 @@ async def ai_youtube_page():
             const resp = await fetch(url);
             const data = await resp.json();
             if (!data.success) { out.innerHTML = '<em>Generation failed</em>'; return; }
-            let h = '<div style="margin-top:0.5rem;"><h4 style="color:var(--accent);margin-bottom:0.3rem;">🎬 Internal Video Script: '+data.topic+'</h4>';
+            let h = '<div style="margin-top:0.5rem;"><h4 style="color:var(--accent);margin-bottom:0.3rem;">≡ƒÄ¼ Internal Video Script: '+data.topic+'</h4>';
             h += '<p style="font-size:0.8rem;color:#666;">'+data.total_clips+' scenes &middot; ~'+data.total_duration+'s total duration</p>';
             h += '<div style="display:flex;flex-direction:column;gap:1.2rem;margin-top:1rem;">';
             for (const c of data.clips) {
@@ -2743,10 +2921,10 @@ async def ai_youtube_page():
                 h += '<p style="margin:0;font-size:0.95rem;line-height:1.5;color:#111;">'+c.text+'</p>';
                 h += '</div>';
                 if (c.key_formula_or_term) {
-                    h += '<div style="font-size:0.85rem;color:var(--primary);margin-top:0.5rem;font-weight:600;">🔑 Focus Formula/Term: <code style="background:#eef2ff;padding:0.1rem 0.4rem;border-radius:4px;">'+c.key_formula_or_term+'</code></div>';
+                    h += '<div style="font-size:0.85rem;color:var(--primary);margin-top:0.5rem;font-weight:600;">≡ƒöæ Focus Formula/Term: <code style="background:#eef2ff;padding:0.1rem 0.4rem;border-radius:4px;">'+c.key_formula_or_term+'</code></div>';
                 }
                 h += '<div style="margin-top:1rem;display:flex;gap:0.5rem;">';
-                h += '<button onclick="speakTextLocally(\''+c.text.replace(/'/g, "\\'")+'\')" style="padding:0.4rem 1rem;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-weight:600;">🔊 Play Voiceover</button>';
+                h += '<button onclick="speakTextLocally(\''+c.text.replace(/'/g, "\\'")+'\')" style="padding:0.4rem 1rem;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-weight:600;">≡ƒöè Play Voiceover</button>';
                 h += '</div>';
                 h += '</div>';
             }
@@ -2770,11 +2948,11 @@ async def ai_youtube_page():
 
 @app.get("/ai/research", response_class=HTMLResponse)
 async def ai_research_page():
-    return HTMLResponse(_render(title="AI Research Assistant — AI Study Companion", content="""
-    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Research</div>
+    return HTMLResponse(_render(title="AI Research Assistant ΓÇö AI Study Companion", content="""
+    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Research</div>
     <div class="section">
-        <h2>🔬 AI Research Assistant</h2>
-        <p class="subtitle">Deep research on any topic — powered by Mistral AI</p>
+        <h2>≡ƒö¼ AI Research Assistant</h2>
+        <p class="subtitle">Deep research on any topic ΓÇö powered by Mistral AI</p>
         <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
             <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Research Query</label>
             <input type="text" id="res-query" value="Photosynthesis process" style="width:100%;padding:0.7rem;border:1px solid var(--border);border-radius:8px;margin-bottom:1rem;">
@@ -2800,10 +2978,10 @@ async def ai_research_page():
 
 @app.get("/ai/literature", response_class=HTMLResponse)
 async def ai_literature_page():
-    return HTMLResponse(_render(title="AI Literature Review — AI Study Companion", content="""
-    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Literature</div>
+    return HTMLResponse(_render(title="AI Literature Review ΓÇö AI Study Companion", content="""
+    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Literature</div>
     <div class="section">
-        <h2>📚 AI Literature Review</h2>
+        <h2>≡ƒôÜ AI Literature Review</h2>
         <p class="subtitle">Research paper summaries on any topic</p>
         <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
             <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Topic</label>
@@ -2835,10 +3013,10 @@ async def ai_literature_page():
 
 @app.get("/ai/visualize", response_class=HTMLResponse)
 async def ai_visualize_page():
-    return HTMLResponse(_render(title="AI SVG Visualizer — AI Study Companion", content="""
-    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Visualizer</div>
+    return HTMLResponse(_render(title="AI SVG Visualizer ΓÇö AI Study Companion", content="""
+    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Visualizer</div>
     <div class="section">
-        <h2>👁️ AI SVG Visualizer</h2>
+        <h2>≡ƒæü∩╕Å AI SVG Visualizer</h2>
         <p class="subtitle">Generate SVG diagrams for any concept</p>
         <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
             <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Concept</label>
@@ -2865,10 +3043,10 @@ async def ai_visualize_page():
 
 @app.get("/ai/pedagogical", response_class=HTMLResponse)
 async def ai_pedagogical_page():
-    return HTMLResponse(_render(title="NotebookLM Pedagogical Guide — AI Study Companion", content="""
-    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">›</span> <a href="/ai">AI Studio</a> <span class="sep">›</span> Pedagogical Guide</div>
+    return HTMLResponse(_render(title="NotebookLM Pedagogical Guide ΓÇö AI Study Companion", content="""
+    <div class="breadcrumb"><a href="/">Home</a> <span class="sep">ΓÇ║</span> <a href="/ai">AI Studio</a> <span class="sep">ΓÇ║</span> Pedagogical Guide</div>
     <div class="section">
-        <h2>📖 AI Pedagogical Guide</h2>
+        <h2>≡ƒôû AI Pedagogical Guide</h2>
         <p class="subtitle">Detailed study guides with learning objectives, prerequisites, and practice questions</p>
         <div class="book-section" style="padding:1.5rem;margin-top:1rem;">
             <label style="font-weight:500;display:block;margin-bottom:0.5rem;">Subject</label>
@@ -2920,9 +3098,9 @@ self.addEventListener('fetch', function(e) {
     return Response(content=sw_js, media_type="application/javascript")
 
 
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 # CONTENT ROUTES (notes, revision, quiz, mindmap, interactives)
-# ═══════════════════════════════════════════════════════════════════════════
+# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
 
 @app.get("/notes/{chapter_id}", response_class=HTMLResponse)
@@ -2930,12 +3108,12 @@ async def notes_page(chapter_id: str):
     conn = DB
     chapter = conn.query_one("SELECT * FROM chapters WHERE id = ?", (chapter_id,)) if conn and conn.table_exists("chapters") else None
     if not chapter:
-        return HTMLResponse(_render(title="Notes — Not Found", content='<div class="section"><h2>Notes Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
+        return HTMLResponse(_render(title="Notes ΓÇö Not Found", content='<div class="section"><h2>Notes Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
     topics = conn.query("SELECT * FROM topics WHERE chapter_id = ? ORDER BY num, title", (chapter_id,))
     items = "".join(f'<li><strong>{t["title"]}</strong>: {t.get("content","")[:200]}...</li>' for t in topics)
     return HTMLResponse(_render(title=f"Notes: {chapter['title']}", content=f"""
     <div class="breadcrumb">{_build_breadcrumb([("Home", "/"), (f"Ch {chapter['num']}: {chapter['title']}", f"/chapter/{chapter_id}"), ("Notes", None)])}</div>
-    <div class="section"><h2>📝 Revision Notes: {chapter['title']}</h2><ul style="line-height:1.8;">{items}</ul></div>"""))
+    <div class="section"><h2>≡ƒô¥ Revision Notes: {chapter['title']}</h2><ul style="line-height:1.8;">{items}</ul></div>"""))
 
 
 @app.get("/revision/{chapter_id}", response_class=HTMLResponse)
@@ -2943,12 +3121,12 @@ async def revision_page(chapter_id: str):
     conn = DB
     chapter = conn.query_one("SELECT * FROM chapters WHERE id = ?", (chapter_id,)) if conn and conn.table_exists("chapters") else None
     if not chapter:
-        return HTMLResponse(_render(title="Revision — Not Found", content='<div class="section"><h2>Revision Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
+        return HTMLResponse(_render(title="Revision ΓÇö Not Found", content='<div class="section"><h2>Revision Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
     topics = conn.query("SELECT title, content FROM topics WHERE chapter_id = ? ORDER BY num, title", (chapter_id,))
-    points = "".join(f'<li>✔ {t["title"]}: {t.get("content","")[:150]}</li>' for t in topics)
+    points = "".join(f'<li>Γ£ö {t["title"]}: {t.get("content","")[:150]}</li>' for t in topics)
     return HTMLResponse(_render(title=f"Revision: {chapter['title']}", content=f"""
     <div class="breadcrumb">{_build_breadcrumb([("Home", "/"), (f"Ch {chapter['num']}: {chapter['title']}", f"/chapter/{chapter_id}"), ("Revision", None)])}</div>
-    <div class="section"><h2>🔄 Quick Revision: {chapter['title']}</h2><ul style="line-height:1.8;">{points}</ul></div>"""))
+    <div class="section"><h2>≡ƒöä Quick Revision: {chapter['title']}</h2><ul style="line-height:1.8;">{points}</ul></div>"""))
 
 
 @app.get("/quiz/{entity_id}", response_class=HTMLResponse)
@@ -2957,19 +3135,19 @@ async def quiz_page(entity_id: str):
     # Try as chapter_id first
     chapter = conn.query_one("SELECT * FROM chapters WHERE id = ?", (entity_id,)) if conn and conn.table_exists("chapters") else None
     if not chapter:
-        # Try as subject_id — list all chapter quizzes
+        # Try as subject_id ΓÇö list all chapter quizzes
         subject = conn.query_one("SELECT * FROM subjects WHERE id = ?", (entity_id,)) if conn and conn.table_exists("subjects") else None
         if subject:
             chapters = conn.query("SELECT * FROM chapters WHERE subject_id = ? ORDER BY num", (entity_id,))
             quiz_links = ""
             for ch in chapters:
-                quiz_links += f'<div class="book-section" style="margin-bottom:0.5rem;"><a href="/quiz/{ch["id"]}" style="text-decoration:none;display:flex;justify-content:space-between;align-items:center;"><span>Ch {ch["num"]}: {ch["title"]}</span><span style="font-size:0.8rem;color:var(--accent);">📝 Quiz →</span></a></div>'
+                quiz_links += f'<div class="book-section" style="margin-bottom:0.5rem;"><a href="/quiz/{ch["id"]}" style="text-decoration:none;display:flex;justify-content:space-between;align-items:center;"><span>Ch {ch["num"]}: {ch["title"]}</span><span style="font-size:0.8rem;color:var(--accent);">≡ƒô¥ Quiz ΓåÆ</span></a></div>'
             if not quiz_links:
                 quiz_links = '<p style="color:#666;">No chapters available for quizzes yet.</p>'
             return HTMLResponse(_render(title=f"Quizzes: {subject['name']}", content=f"""
             <div class="breadcrumb">{_build_breadcrumb([("Home", "/"), (f"{subject['name']}", f"/board/{subject['board_id']}/{entity_id}"), ("Quizzes", None)])}</div>
-            <div class="section"><h2>📝 Practice Quizzes: {subject['name']}</h2><p style="color:#666;margin-bottom:1rem;">Select a chapter to practice.</p>{quiz_links}</div>"""))
-        return HTMLResponse(_render(title="Quiz — Not Found", content='<div class="section"><h2>Quiz Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
+            <div class="section"><h2>≡ƒô¥ Practice Quizzes: {subject['name']}</h2><p style="color:#666;margin-bottom:1rem;">Select a chapter to practice.</p>{quiz_links}</div>"""))
+        return HTMLResponse(_render(title="Quiz ΓÇö Not Found", content='<div class="section"><h2>Quiz Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
     chapter_id = entity_id
     problems = conn.query("SELECT * FROM problems WHERE chapter_id = ? LIMIT 20", (chapter_id,)) if conn.table_exists("problems") else []
     cards = ""
@@ -2981,7 +3159,7 @@ async def quiz_page(entity_id: str):
         cards = '<p style="color:#666;">No practice problems for this chapter yet.</p>'
     return HTMLResponse(_render(title=f"Quiz: {chapter['title']}", content=f"""
     <div class="breadcrumb">{_build_breadcrumb([("Home", "/"), (f"Ch {chapter['num']}: {chapter['title']}", f"/chapter/{chapter_id}"), ("Quiz", None)])}</div>
-    <div class="section"><h2>📝 Practice Quiz: {chapter['title']}</h2><p style="color:#666;margin-bottom:1rem;">Test your knowledge with these practice problems.</p>{cards}</div>"""))
+    <div class="section"><h2>≡ƒô¥ Practice Quiz: {chapter['title']}</h2><p style="color:#666;margin-bottom:1rem;">Test your knowledge with these practice problems.</p>{cards}</div>"""))
 
 
 @app.get("/mindmap/{topic_id}", response_class=HTMLResponse)
@@ -2989,7 +3167,7 @@ async def mindmap_page(topic_id: str):
     conn = DB
     topic = conn.query_one("SELECT * FROM topics WHERE id = ?", (topic_id,)) if conn and conn.table_exists("topics") else None
     if not topic:
-        return HTMLResponse(_render(title="Mind Map — Not Found", content='<div class="section"><h2>Mind Map Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
+        return HTMLResponse(_render(title="Mind Map ΓÇö Not Found", content='<div class="section"><h2>Mind Map Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
     
     import asyncio
     res_mm, res_fc, res_cm = await asyncio.gather(
@@ -3032,13 +3210,13 @@ async def mindmap_page(topic_id: str):
     </style>
     <div class="breadcrumb">{_build_breadcrumb([("Home", "/"), (topic['title'], f"/topic/{topic_id}"), ("Visualizations", None)])}</div>
     <div class="section">
-        <h2>🧠 Interactive Concept Visualizer: {htmlmod.escape(topic['title'])}</h2>
+        <h2>≡ƒºá Interactive Concept Visualizer: {htmlmod.escape(topic['title'])}</h2>
         <p class="subtitle" style="color:#666; margin-bottom:1.5rem;">Explore customized representations of this concept tailored for different learning modes.</p>
         
         <div class="math-tabs">
-            <button class="math-tab-btn active diag-tab-btn" onclick="switchDiagTab('mindmap')">🗺️ 1. Radial Mind Map (Dot Connectors)</button>
-            <button class="math-tab-btn diag-tab-btn" onclick="switchDiagTab('flowchart')">📐 2. Process Flowchart (Step Outcomes)</button>
-            <button class="math-tab-btn diag-tab-btn" onclick="switchDiagTab('conceptmap')">🔗 3. Relation Map & Video (Detailed Visuals)</button>
+            <button class="math-tab-btn active diag-tab-btn" onclick="switchDiagTab('mindmap')">≡ƒù║∩╕Å 1. Radial Mind Map (Dot Connectors)</button>
+            <button class="math-tab-btn diag-tab-btn" onclick="switchDiagTab('flowchart')">≡ƒôÉ 2. Process Flowchart (Step Outcomes)</button>
+            <button class="math-tab-btn diag-tab-btn" onclick="switchDiagTab('conceptmap')">≡ƒöù 3. Relation Map & Video (Detailed Visuals)</button>
         </div>
         
         <div id="diag-tab-mindmap" class="diag-tab-content" style="margin-top:1.5rem; display:block;">
@@ -3050,7 +3228,7 @@ async def mindmap_page(topic_id: str):
                 <pre class="mermaid" style="background:none; border:none; margin:0; padding:0; overflow-x:auto;">{res_mm.get("diagram", "")}</pre>
             </div>
             <div class="study-guide-card" style="background:#fff; padding:1.5rem; border-radius:12px; border:1px solid var(--border); box-shadow:0 4px 12px rgba(0,0,0,0.03); text-align:left; margin-top:1.5rem;">
-                <h3 style="color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:0.5rem;">📖 Dot-Connection & Association Guide</h3>
+                <h3 style="color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:0.5rem;">≡ƒôû Dot-Connection & Association Guide</h3>
                 <div style="font-size:0.95rem; line-height:1.6; color:#333;">{res_mm.get("explanation", "")}</div>
             </div>
         </div>
@@ -3064,7 +3242,7 @@ async def mindmap_page(topic_id: str):
                 <pre class="mermaid" style="background:none; border:none; margin:0; padding:0; overflow-x:auto;">{res_fc.get("diagram", "")}</pre>
             </div>
             <div class="study-guide-card" style="background:#fff; padding:1.5rem; border-radius:12px; border:1px solid var(--border); box-shadow:0 4px 12px rgba(0,0,0,0.03); text-align:left; margin-top:1.5rem;">
-                <h3 style="color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:0.5rem;">📖 Sequential Process & Outcomes Guide</h3>
+                <h3 style="color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:0.5rem;">≡ƒôû Sequential Process & Outcomes Guide</h3>
                 <div style="font-size:0.95rem; line-height:1.6; color:#333;">{res_fc.get("explanation", "")}</div>
             </div>
         </div>
@@ -3083,7 +3261,7 @@ async def mindmap_page(topic_id: str):
             </div>
 
             <div class="study-guide-card" style="background:#fff; padding:1.5rem; border-radius:12px; border:1px solid var(--border); box-shadow:0 4px 12px rgba(0,0,0,0.03); text-align:left; margin-top:1.5rem;">
-                <h3 style="color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:0.5rem;">📖 Detailed Concept Relation Guide</h3>
+                <h3 style="color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:0.5rem;">≡ƒôû Detailed Concept Relation Guide</h3>
                 <div style="font-size:0.95rem; line-height:1.6; color:#333;">{res_cm.get("explanation", "")}</div>
             </div>
         </div>
@@ -3097,26 +3275,26 @@ async def interactives_cards_page(topic_id: str):
     conn = DB
     topic = conn.query_one("SELECT * FROM topics WHERE id = ?", (topic_id,)) if conn and conn.table_exists("topics") else None
     if not topic:
-        return HTMLResponse(_render(title="Flash Cards — Not Found", content='<div class="section"><h2>Flash Cards Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
+        return HTMLResponse(_render(title="Flash Cards ΓÇö Not Found", content='<div class="section"><h2>Flash Cards Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
     chunks = conn.query("SELECT * FROM chunks WHERE topic_id = ? ORDER BY seq", (topic_id,))
     cards_html = ""
     for c in chunks:
         title = c.get("title", "") or c.get("content", "")[:40]
         content = c.get("content", "")
-        cards_html += f'<div class="book-section" style="cursor:pointer;margin-bottom:0.5rem;" onclick="this.querySelector(\'.card-content\').style.display=this.querySelector(\'.card-content\').style.display===\'none\'?\'block\':\'none\'"><h4 style="margin:0;">📇 {title}</h4><div class="card-content" style="display:none;margin-top:0.5rem;padding:0.8rem;background:#f8f9ff;border-radius:6px;">{content}</div></div>'
+        cards_html += f'<div class="book-section" style="cursor:pointer;margin-bottom:0.5rem;" onclick="this.querySelector(\'.card-content\').style.display=this.querySelector(\'.card-content\').style.display===\'none\'?\'block\':\'none\'"><h4 style="margin:0;">≡ƒôç {title}</h4><div class="card-content" style="display:none;margin-top:0.5rem;padding:0.8rem;background:#f8f9ff;border-radius:6px;">{content}</div></div>'
     if not cards_html:
         cards_html = '<p style="color:#666;">No flash cards for this topic yet.</p>'
     return HTMLResponse(_render(title=f"Flash Cards: {topic['title']}", content=f"""
     <div class="breadcrumb">{_build_breadcrumb([("Home", "/"), (topic['title'], f"/topic/{topic_id}"), ("Flash Cards", None)])}</div>
-    <div class="section"><h2>🃏 Flash Cards: {topic['title']}</h2><p style="color:#666;margin-bottom:1rem;">Click a card to flip it.</p>{cards_html}</div>
-    <script>document.querySelectorAll('.book-section h4').forEach(function(el,i){{el.textContent = '📇 Card '+(i+1)+': '+el.textContent.replace('📇 ','');}});</script>"""))
+    <div class="section"><h2>≡ƒâÅ Flash Cards: {topic['title']}</h2><p style="color:#666;margin-bottom:1rem;">Click a card to flip it.</p>{cards_html}</div>
+    <script>document.querySelectorAll('.book-section h4').forEach(function(el,i){{el.textContent = '≡ƒôç Card '+(i+1)+': '+el.textContent.replace('≡ƒôç ','');}});</script>"""))
 
 
 @app.get("/interactives/matching/{entity_id}", response_class=HTMLResponse)
 async def interactives_matching_page(entity_id: str):
     conn = DB
     if not conn or not conn.table_exists("chapters"):
-        return HTMLResponse(_render(title="Matching — Not Found", content='<div class="section"><h2>Matching Game Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
+        return HTMLResponse(_render(title="Matching ΓÇö Not Found", content='<div class="section"><h2>Matching Game Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
     # Accept either chapter_id or topic_id
     chapter = conn.query_one("SELECT * FROM chapters WHERE id = ?", (entity_id,))
     if not chapter:
@@ -3124,7 +3302,7 @@ async def interactives_matching_page(entity_id: str):
         if topic:
             chapter = conn.query_one("SELECT * FROM chapters WHERE id = ?", (topic["chapter_id"],))
     if not chapter:
-        return HTMLResponse(_render(title="Matching — Not Found", content='<div class="section"><h2>Matching Game Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
+        return HTMLResponse(_render(title="Matching ΓÇö Not Found", content='<div class="section"><h2>Matching Game Not Found</h2><p><a href="/">Go Home</a></p></div>'), status_code=404)
     chapter_id = chapter["id"]
     topics = conn.query("SELECT id, title, content FROM topics WHERE chapter_id = ? ORDER BY RANDOM() LIMIT 12", (chapter_id,))
     if len(topics) < 4:
@@ -3133,7 +3311,7 @@ async def interactives_matching_page(entity_id: str):
     right = "".join(f'<div class="match-item" data-id="{t["id"]}" style="padding:0.5rem 0.8rem;background:#fef9c3;border-radius:6px;cursor:pointer;margin:0.2rem;text-align:center;font-size:0.85rem;">{t.get("content","")[:80]}</div>' for t in topics)
     return HTMLResponse(_render(title=f"Matching: {chapter['title']}", content=f"""
     <div class="breadcrumb">{_build_breadcrumb([("Home", "/"), (f"Ch {chapter['num']}: {chapter['title']}", f"/chapter/{chapter_id}"), ("Matching Game", None)])}</div>
-    <div class="section"><h2>🔗 Matching Game: {chapter['title']}</h2><p style="color:#666;margin-bottom:1rem;">Match topics with their descriptions.</p>
+    <div class="section"><h2>≡ƒöù Matching Game: {chapter['title']}</h2><p style="color:#666;margin-bottom:1rem;">Match topics with their descriptions.</p>
     <div style="display:flex;gap:2rem;flex-wrap:wrap;">
         <div style="flex:1;min-width:200px;"><h4 style="font-size:0.9rem;">Topics</h4><div id="match-left">{left}</div></div>
         <div style="flex:1;min-width:200px;"><h4 style="font-size:0.9rem;">Descriptions</h4><div id="match-right">{right}</div></div>
@@ -3149,7 +3327,7 @@ async def interactives_matching_page(entity_id: str):
                 if(l.style.opacity==='0.4' && r.style.opacity==='0.4') matched++;
             }});
             document.getElementById('match-status').textContent = matched + ' / ' + total + ' matched';
-            if(matched===total) document.getElementById('match-status').textContent = '🎉 All matched! Perfect!';
+            if(matched===total) document.getElementById('match-status').textContent = '≡ƒÄë All matched! Perfect!';
         }}
         document.querySelectorAll('#match-left .match-item').forEach(function(el){{
             el.addEventListener('click',function(){{
