@@ -2,18 +2,22 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# System deps for sqlite + build
+RUN apt-get update && apt-get install -y --no-install-recommends gcc && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY *.py /app/
-COPY templates/ /app/templates/
-COPY seed_data/ /app/seed_data/
+# Copy everything (enterprise, services, agents, templates, etc.)
+COPY . /app/
 
-ENV PORT=9090
-ENV UVICORN_WORKERS=4
-ENV DATABASE_URL=postgresql://user:pass@host:5432/cbse
+# Fly expects 8080, but respect $PORT
+ENV PORT=8080
+ENV UVICORN_WORKERS=2
+ENV DATABASE_URL=sqlite:///cbse_content.db
 ENV ALLOWED_HOSTS=*
+ENV PYTHONUNBUFFERED=1
 
-EXPOSE 9090
+EXPOSE 8080
 
 CMD ["/bin/sh", "start.sh"]

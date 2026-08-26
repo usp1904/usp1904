@@ -4,3 +4,10 @@ __pycache__/
 .env
 *.log
 /tmp/
+
+# HF Space - ignore large DB
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+
