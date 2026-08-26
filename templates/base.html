@@ -16,37 +16,37 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 :root {
-    --primary: #1e1b4b;
-    --primary-light: #312e81;
-    --accent: #6366f1;
-    --accent2: #8b5cf6;
-    --accent-glow: #a78bfa;
-    --highlight: #f43f5e;
-    --bg: #f1f5f9;
-    --card-bg: #ffffff;
-    --glass-bg: rgba(255, 255, 255, 0.75);
-    --text: #0f172a;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --radius-lg: 20px;
-    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    --bottom-safe: env(safe-area-inset-bottom, 0px);
-    --error: #ef4444;
-    --success: #10b981;
-    --font: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --primary: #1e1b4b;
+  --primary-light: #312e81;
+  --accent: #6366f1;
+  --accent2: #8b5cf6;
+  --accent-glow: #a78bfa;
+  --highlight: #f43f5e;
+  --bg: #f1f5f9;
+  --card-bg: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 20px;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --bottom-safe: env(safe-area-inset-bottom, 0px);
+  --error: #ef4444;
+  --success: #10b981;
+  --font: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow-x: hidden;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -57,27 +57,27 @@ body {
 <div class="vg-tricolor" aria-hidden="true"></div>
 <div class="sticky-wrapper">
 <div class="gbar">
-  <div class="gbar-inner">
-    <a href="/" class="gbar-brand">AI Study Companion</a>
-    <div class="gbar-nav">
-      <a href="/">Home</a>
-      <a href="/search">Search</a>
-      <a href="/tutor">Tutor</a>
-      <a href="/exams">Exams</a>
-      <a href="/about">About</a>
-    </div>
-    <div class="gbar-right">
-      <span class="xp-badge">⭐ <span id="xp-display">{{ xp }}</span>XP</span>
-{% if user %}
-      <span class="user-badge">👤 {{ user.username }}</span>
-      <a href="/profile" class="gbar-link">Profile</a>
-      <a href="#" onclick="fetch('/api/auth/logout',{method:'POST'}).then(()=>location.href='/')" class="gbar-link">Logout</a>
-{% elif auth_configured %}
-      <a href="/login" class="gbar-link">Login</a>
-      <a href="/signup" class="gbar-link">Sign Up</a>
-{% endif %}
-    </div>
+ <div class="gbar-inner">
+  <a href="/" class="gbar-brand">AI Study Companion</a>
+  <div class="gbar-nav">
+   <a href="/">Home</a>
+   <a href="/search">Search</a>
+   <a href="/tutor">Tutor</a>
+   <a href="/exams">Exams</a>
+   <a href="/about">About</a>
   </div>
+  <div class="gbar-right">
+   <span class="xp-badge"> <span id="xp-display">{{ xp }}</span>XP</span>
+{% if user %}
+   <span class="user-badge"> {{ user.username }}</span>
+   <a href="/profile" class="gbar-link">Profile</a>
+   <a href="#" onclick="fetch('/api/auth/logout',{method:'POST'}).then(()=>location.href='/')" class="gbar-link">Logout</a>
+{% elif auth_configured %}
+   <a href="/login" class="gbar-link">Login</a>
+   <a href="/signup" class="gbar-link">Sign Up</a>
+{% endif %}
+  </div>
+ </div>
 </div>
 </div>
 <div class="container">
@@ -85,43 +85,43 @@ body {
 </div>
 
 <script>window.onerror = function(msg, url, line, col, err) {
-    console.error('GLOBAL:', msg, 'at', url, line + ':' + col);
+  console.error('GLOBAL:', msg, 'at', url, line + ':' + col);
 };
 window.addEventListener('unhandledrejection', function(e) {
-    console.error('UNHANDLED PROMISE:', e.reason);
+  console.error('UNHANDLED PROMISE:', e.reason);
 });
 function _setText(id, val) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = val;
+  var el = document.getElementById(id);
+  if (el) el.textContent = val;
 }
 async function loadGamification() {
-    try {
-        const resp = await fetch('/api/gamification');
-        const data = await resp.json();
-        _setText('streak-count', data.streak);
-        _setText('xp-count', data.xp);
-        _setText('level-num', data.level);
-    } catch(e) {}
+  try {
+    const resp = await fetch('/api/gamification');
+    const data = await resp.json();
+    _setText('streak-count', data.streak);
+    _setText('xp-count', data.xp);
+    _setText('level-num', data.level);
+  } catch(e) {}
 }
 function escapeHtml(text) {
-    const d = document.createElement('div');
-    d.textContent = text;
-    return d.innerHTML;
+  const d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
 }
 function switchMathTab(tabId) {
-    document.querySelectorAll('.math-tab-content').forEach(el => {
-        el.classList.remove('active');
-    });
-    document.querySelectorAll('.math-tab-btn').forEach(el => {
-        el.classList.remove('active');
-    });
-    const targetContent = document.getElementById('math-tab-' + tabId);
-    if (targetContent) targetContent.classList.add('active');
-    const targetBtn = document.querySelector(`[onclick="switchMathTab('${tabId}')"]`);
-    if (targetBtn) targetBtn.classList.add('active');
+  document.querySelectorAll('.math-tab-content').forEach(el => {
+    el.classList.remove('active');
+  });
+  document.querySelectorAll('.math-tab-btn').forEach(el => {
+    el.classList.remove('active');
+  });
+  const targetContent = document.getElementById('math-tab-' + tabId);
+  if (targetContent) targetContent.classList.add('active');
+  const targetBtn = document.querySelector(`[onclick="switchMathTab('${tabId}')"]`);
+  if (targetBtn) targetBtn.classList.add('active');
 }
 document.addEventListener('DOMContentLoaded', function() {
-    loadGamification();
+  loadGamification();
 });
 </script>
 </body>

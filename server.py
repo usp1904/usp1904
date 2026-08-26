@@ -1388,6 +1388,8 @@ async def chapter_page(chapter_id: str):
 
     subj_name = subject["name"] if subject else ""
     board_id = (subject["board_id"] if subject else "").upper()
+    is_unified_math = is_math and subject and subject.get("board_id","").lower()=="cbse"
+    unified_banner = f'<div style="margin:0.8rem 0;padding:0.7rem 1rem;background:linear-gradient(90deg, #6366F1, #8b5cf6);border-radius:8px;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;"><span style="font-weight:600;">Unified Resource: NCERT + RD Sharma + RS Aggarwal + Arihant — all at one place</span><a href="/unified/math/{chapter_id}" class="tts-btn" style="background:#fff;color:#6366F1;padding:0.35rem 0.8rem;font-size:0.78rem;">Open Unified View</a></div>' if is_unified_math else ""
     content = f"""<div class="breadcrumb">{_build_breadcrumb([
         ("Home", "/"),
         (board_id, f"/board/{subject['board_id'].lower() if subject else ''}"),
@@ -1397,6 +1399,7 @@ async def chapter_page(chapter_id: str):
 <div class="section">
 <h2>Ch {chapter['num']}: {chapter['title']}</h2>
 <p style="color:#666;margin-bottom:1rem;">{subject["name"] if subject else ""}</p>
+{unified_banner}
 <div class="chapter-actions">
 <a href="/notes/{chapter_id}" class="tts-btn" style="font-size:0.8rem;">Notes</a>
 <a href="/revision/{chapter_id}" class="tts-btn" style="font-size:0.8rem;">Revision</a>
@@ -3481,6 +3484,107 @@ async def api_syllabus(request: Request, subject_id: Optional[str] = Query(None)
     else:
         return JSONResponse(content=cache.get("subjects", []))
 
+
+@app.get("/unified", response_class=HTMLResponse)
+async def unified_index():
+    # List all NCERT Mathematics chapters with unified counts
+    conn = get_db()
+    if not conn:
+        return HTMLResponse(_render(title="Unified — Not Ready", content="<p>DB not ready</p>"), status_code=503)
+    chapters = conn.query("SELECT id, num, title FROM chapters WHERE subject_id='mathematics' AND board_id='cbse' ORDER BY num")
+    rows = ""
+    for ch in chapters:
+        ex_cnt = conn.query_one("SELECT COUNT(*) as c FROM exercises WHERE chapter_id=?", (ch["id"],))["c"] if conn.table_exists("exercises") else 0
+        prob_cnt = conn.query_one("SELECT COUNT(*) as c FROM problems WHERE chapter_id=?", (ch["id"],))["c"]
+        rows += f'<tr><td>Chapter {ch["num"]}: {htmlmod.escape(ch["title"])}</td><td>{ex_cnt} exercises</td><td>{prob_cnt} problems</td><td><a href="/unified/math/{ch["id"]}" class="tts-btn" style="padding:0.3rem 0.8rem;font-size:0.78rem;">Open Unified</a></td></tr>'
+    content = f"""<div class="breadcrumb">{_build_breadcrumb([("Home","/"),("Unified Mathematics", None)])}</div>
+<div class="section"><h2>Unified Mathematics — NCERT + RD Sharma + RS Aggarwal + Arihant</h2>
+<p style="color:#666;margin-bottom:1rem;">Every chapter consolidated at one place. NCERT baseline topics first, then RD Sharma, RS Aggarwal, Arihant mapped under same chapter headings — no duplication, progressive learning.</p>
+<table class="data-table"><thead><tr><th>Chapter</th><th>Exercises</th><th>Problems</th><th></th></tr></thead><tbody>{rows}</tbody></table></div>"""
+    return HTMLResponse(_render(title="Unified Mathematics — NCERT + RD Sharma + RS Aggarwal + Arihant", content=content))
+
+@app.get("/unified/math/{chapter_id}", response_class=HTMLResponse)
+async def unified_math_chapter(chapter_id: str):
+    conn = get_db()
+    chapter = conn.query_one("SELECT * FROM chapters WHERE id=?", (chapter_id,))
+    if not chapter:
+        return HTMLResponse(_render(title="Not Found", content="<p>Chapter not found</p>"), status_code=404)
+    subject = conn.query_one("SELECT * FROM subjects WHERE id=?", (chapter["subject_id"],)) if chapter else None
+    # NCERT baseline topics
+    topics = conn.query("SELECT * FROM topics WHERE chapter_id=? ORDER BY num, title", (chapter_id,))
+    topics_html = ""
+    for t in topics:
+        chunks = conn.query("SELECT * FROM chunks WHERE topic_id=? ORDER BY seq", (t["id"],))
+        content_html = format_math_content(t.get("content",""))
+        for c in chunks[:1]:
+            content_html += f'<div class="chunk-content" style="margin-top:0.5rem;color:#4A5778;font-size:0.95rem;">{format_math_content(c.get("content","")[:400])}</div>'
+        topics_html += f'<div class="section" style="border-left:4px solid var(--vg-math, #6366F1);"><h3>{htmlmod.escape(t["title"])}</h3>{content_html or "<p style=color:#888>NCERT baseline topic</p>"}</div>'
+
+    # Unified exercises grouped by source
+    exercises = conn.query("SELECT * FROM exercises WHERE chapter_id=? ORDER BY CASE source_book WHEN 'NCERT' THEN 1 WHEN 'RD_SHARMA' THEN 2 WHEN 'RS_AGGARWAL' THEN 3 WHEN 'ARIHANT' THEN 4 ELSE 5 END, exercise_label", (chapter_id,)) if conn.table_exists("exercises") else []
+    # Group
+    grouped = {"NCERT": [], "RD_SHARMA": [], "RS_AGGARWAL": [], "ARIHANT": []}
+    for ex in exercises:
+        src = ex.get("source_book") or "NCERT"
+        grouped.setdefault(src, []).append(ex)
+
+    def render_exercise_group(title, color, ex_list):
+        if not ex_list:
+            return ""
+        html = f'<h3 style="margin:1.5rem 0 0.8rem;color:{color};border-bottom:2px solid {color};padding-bottom:0.3rem;">{title}</h3>'
+        for ex in ex_list:
+            probs = conn.query("SELECT * FROM problems WHERE exercise_id=? ORDER BY seq, id", (ex["id"],))
+            if not probs:
+                continue
+            html += f'<div class="book-section" style="margin-bottom:1rem;"><h4 style="margin:0 0 0.5rem;">{htmlmod.escape(ex["exercise_label"])} <span style="font-weight:400;color:#8590AD;font-size:0.85rem;">— {len(probs)} problems</span></h4>'
+            for idx, p in enumerate(probs, 1):
+                # Step-by-step solution already contains Board + Competitive sections
+                qtext = format_math_content(p.get("problem_text",""))
+                sol = p.get("solution_text","")
+                # Render solution with math
+                sol_html = format_math_content(sol)
+                html += f'''
+<div class="solved-problem-card" style="margin-bottom:0.6rem;">
+  <div class="solved-problem-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+    <span>Q{idx}: {qtext[:120]}...</span><span style="color:{color};font-weight:700;">+</span>
+  </div>
+  <div class="solved-problem-body" style="display:none;">
+    <div class="problem-box"><div class="problem-header">Problem</div><div class="problem-text">{qtext}</div></div>
+    <div class="solution-steps" style="margin-top:0.6rem;"><div class="problem-header" style="color:var(--success);">Step-by-step Solution — Board + Competitive Shortcut</div>{sol_html}</div>
+    <div style="margin-top:0.6rem;font-size:0.8rem;color:#8590AD;">Source: {htmlmod.escape(ex["exercise_label"])} <span style="background:#F4E9CC;padding:0.1rem 0.4rem;border-radius:4px;margin-left:0.4rem;">{ex.get("source_book","")}</span></div>
+  </div>
+</div>'''
+            html += '</div>'
+        return html
+
+    unified_html = ""
+    unified_html += render_exercise_group("NCERT Baseline — Exercises 1.1 to 1.4 (as per chapter)", "#6366F1", grouped.get("NCERT",[]))
+    unified_html += render_exercise_group("RD Sharma — Mapped under same NCERT headings", "#B8680F", grouped.get("RD_SHARMA",[]))
+    unified_html += render_exercise_group("RS Aggarwal — Mapped under same NCERT headings", "#0A5C00", grouped.get("RS_AGGARWAL",[]))
+    unified_html += render_exercise_group("Arihant — Practice under same NCERT headings", "#243A9B", grouped.get("ARIHANT",[]))
+
+    # Examples
+    examples = conn.query("SELECT * FROM problems WHERE chapter_id=? AND is_example=1 ORDER BY id", (chapter_id,))
+    examples_html = ""
+    if examples:
+        examples_html = '<h3 style="margin:1.5rem 0 0.8rem;color:#1A2B5C;border-bottom:2px solid #1A2B5C;padding-bottom:0.3rem;">Solved Examples (NCERT)</h3>'
+        for idx, p in enumerate(examples, 1):
+            examples_html += f'<div class="book-section" style="background:linear-gradient(135deg,#fff,#FFFDF7);"><h4>Example {idx}: {format_math_content(p.get("problem_text","")[:120])}</h4><div>{format_math_content(p.get("solution_text",""))}</div></div>'
+
+    content = f"""<div class="breadcrumb">{_build_breadcrumb([("Home","/"),("Unified Mathematics","/unified"),(f"Ch {chapter['num']}: {chapter['title']}", None)])}</div>
+<div class="section vg-hero" style="text-align:left;padding:24px;">
+  <h2>Chapter {chapter['num']}: {htmlmod.escape(chapter['title'])} — Unified Resource</h2>
+  <p style="color:#4A5778;margin-top:0.4rem;">NCERT baseline topics first, then RD Sharma, RS Aggarwal, Arihant consolidated under same headings — no duplication, progressive cross-reference. Every problem has step-by-step with formula and shortcut (with/without formula) for Board + JEE/NEET.</p>
+  <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.8rem;">
+    <a href="/chapter/{chapter_id}" class="tts-btn" style="background:#fff;border:1px solid #E2E8F0;">View Original Chapter</a>
+    <span class="pill pill-saffron">NCERT {len(grouped.get("NCERT",[]))} ex</span><span class="pill pill-leaf">RD {len(grouped.get("RD_SHARMA",[]))}</span><span class="pill pill-chakra">RS {len(grouped.get("RS_AGGARWAL",[]))}</span><span class="pill pill-gold">Arihant {len(grouped.get("ARIHANT",[]))}</span>
+  </div>
+</div>
+<div class="section"><h3>NCERT Baseline Topics</h3><p style="color:#8590AD;font-size:0.9rem;margin-bottom:1rem;">Start here — NCERT topics as per 2026-27 syllabus. All other books map to these headings.</p>{topics_html or "<p>No topics</p>"}</div>
+{examples_html}
+<div class="section"><h3>Consolidated Exercises — All Books at One Place</h3><p style="color:#8590AD;font-size:0.9rem;">Tap any exercise to see problems — each mapped under the same NCERT chapter, no duplication.</p>{unified_html or "<p>No exercises</p>"}</div>
+"""
+    return HTMLResponse(_render(title=f"Unified Ch {chapter['num']}: {chapter['title']}", content=content))
 
 @app.api_route("/{path:path}", methods=["GET", "POST"], response_class=HTMLResponse, include_in_schema=False)
 async def catch_all(request: Request, path: str):
